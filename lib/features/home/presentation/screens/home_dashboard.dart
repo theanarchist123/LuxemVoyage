@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,12 +16,16 @@ import '../../../../features/collections/presentation/screens/collections_screen
 import '../../../../features/costs/presentation/screens/cost_diary_screen.dart';
 import '../../../../features/map/presentation/screens/map_screen.dart';
 import '../../../../features/audio_guide/presentation/screens/audio_guide_player.dart';
+import '../../../../features/planner/presentation/screens/blind_trip_setup_screen.dart';
+import '../../../../features/planner/presentation/screens/swipe_match_screen.dart';
+import '../../../../features/planner/presentation/screens/trip_journal_screen.dart';
+import '../../../../features/gamification/presentation/screens/digital_passport_screen.dart';
 
 // ─── Fallback curated experiences ────────────────────────────────────────────
 const List<Map<String, String>> _fallbackExperiences = [
   {'name': 'Santorini Suites', 'location': 'Santorini, Greece', 'rating': '4.9', 'price': '\$\$\$', 'image': 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=600&auto=format&fit=crop'},
   {'name': 'Maldives Villa', 'location': 'Maldives', 'rating': '5.0', 'price': '\$\$\$\$', 'image': 'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?q=80&w=600&auto=format&fit=crop'},
-  {'name': 'Amalfi Resort', 'location': 'Amalfi Coast, Italy', 'rating': '4.8', 'price': '\$\$\$', 'image': 'https://images.unsplash.com/photo-1533934661936-71e0f03b5ded?q=80&w=600&auto=format&fit=crop'},
+  {'name': 'Amalfi Resort', 'location': 'Amalfi Coast, Italy', 'rating': '4.8', 'price': '\$\$\$', 'image': 'https://images.unsplash.com/photo-1612698093158-e07ac200d44e?q=80&w=600&auto=format&fit=crop'},
   {'name': 'Kyoto Ryokan', 'location': 'Kyoto, Japan', 'rating': '4.9', 'price': '\$\$\$', 'image': 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=600&auto=format&fit=crop'},
   {'name': 'Swiss Chalet', 'location': 'Zermatt, Switzerland', 'rating': '4.7', 'price': '\$\$\$\$', 'image': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=600&auto=format&fit=crop'},
 ];
@@ -160,24 +165,28 @@ class _HomeDashboardState extends State<HomeDashboard> {
           physics: const BouncingScrollPhysics(),
           slivers: [
             SliverToBoxAdapter(child: _buildHeroSection()),
-            SliverToBoxAdapter(child: const SizedBox(height: 22)),
+            SliverToBoxAdapter(child: const SizedBox(height: 32)),
+            SliverToBoxAdapter(child: _buildSectionHeader('The AI Suite', LucideIcons.sparkles)),
+            SliverToBoxAdapter(child: const SizedBox(height: 16)),
+            SliverToBoxAdapter(child: _buildFeaturedInnovationsCarousel()),
+            SliverToBoxAdapter(child: const SizedBox(height: 36)),
+            SliverToBoxAdapter(child: _buildSectionHeader('Travel Toolkit', LucideIcons.briefcase)),
+            SliverToBoxAdapter(child: const SizedBox(height: 16)),
+            SliverToBoxAdapter(child: _buildToolkitGrid()),
+            SliverToBoxAdapter(child: const SizedBox(height: 36)),
             SliverToBoxAdapter(child: _buildQuickActions()),
-            SliverToBoxAdapter(child: const SizedBox(height: 22)),
-            SliverToBoxAdapter(child: _buildWeatherAndMoodRow()),
-            SliverToBoxAdapter(child: const SizedBox(height: 28)),
-            SliverToBoxAdapter(child: _buildSectionHeader('Curated Experiences', LucideIcons.sparkles, onSeeAll: () {
+            SliverToBoxAdapter(child: const SizedBox(height: 36)),
+            SliverToBoxAdapter(child: _buildSectionHeader('Curated Experiences', LucideIcons.compass, onSeeAll: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const TravellerFeedScreen()));
             })),
-            SliverToBoxAdapter(child: const SizedBox(height: 14)),
+            SliverToBoxAdapter(child: const SizedBox(height: 16)),
             SliverToBoxAdapter(child: _buildExperiencesList()),
-            SliverToBoxAdapter(child: const SizedBox(height: 28)),
+            SliverToBoxAdapter(child: const SizedBox(height: 36)),
             SliverToBoxAdapter(child: _buildSectionHeader('Trending Destinations', LucideIcons.trendingUp, onSeeAll: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const MapScreen()));
             })),
-            SliverToBoxAdapter(child: const SizedBox(height: 14)),
+            SliverToBoxAdapter(child: const SizedBox(height: 16)),
             SliverToBoxAdapter(child: _buildTrendingSection()),
-            SliverToBoxAdapter(child: const SizedBox(height: 28)),
-            SliverToBoxAdapter(child: _buildBottomBannerRow()),
             SliverToBoxAdapter(child: const SizedBox(height: 120)),
           ],
         ),
@@ -267,7 +276,10 @@ class _HomeDashboardState extends State<HomeDashboard> {
                 ),
               ),
               GestureDetector(
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CollectionsScreen())),
+                onTap: () {
+                  HapticFeedback.lightImpact();
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const CollectionsScreen()));
+                },
                 child: Container(
                   padding: const EdgeInsets.all(2.5),
                   decoration: const BoxDecoration(shape: BoxShape.circle, gradient: AppTheme.auroraGradient),
@@ -339,6 +351,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
               filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
               child: GestureDetector(
                 onTap: () {
+                  HapticFeedback.lightImpact();
                   // Show the search sheet
                   _showSearchSheet();
                 },
@@ -358,7 +371,10 @@ class _HomeDashboardState extends State<HomeDashboard> {
                           style: TextStyle(color: AppTheme.textPrimary.withOpacity(0.55), fontSize: 14)),
                       ),
                       GestureDetector(
-                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TripPlannerScreen())),
+                        onTap: () {
+                          HapticFeedback.lightImpact();
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => const TripPlannerScreen()));
+                        },
                         child: Container(
                           padding: const EdgeInsets.all(7),
                           decoration: BoxDecoration(
@@ -431,98 +447,6 @@ class _HomeDashboardState extends State<HomeDashboard> {
     );
   }
 
-  // ─── Weather + Mood-board row ────────────────────────────────────────────────
-  Widget _buildWeatherAndMoodRow() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: [
-          // Weather pill — taps to map
-          Expanded(
-            child: GestureDetector(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MapScreen())),
-              child: FutureBuilder<WeatherData?>(
-                future: _weatherFuture,
-                builder: (ctx, snap) {
-                  final w = snap.data;
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [AppTheme.accentTeal.withOpacity(0.14), AppTheme.accentViolet.withOpacity(0.09)],
-                            begin: Alignment.topLeft, end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: AppTheme.accentTeal.withOpacity(0.18)),
-                        ),
-                        child: Row(children: [
-                          Text(w?.icon ?? '🌤️', style: const TextStyle(fontSize: 28)),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  w != null ? '${w.tempC.round()}°C' : '—',
-                                  style: const TextStyle(color: AppTheme.accentTeal, fontSize: 20, fontWeight: FontWeight.w800),
-                                ),
-                                Text(
-                                  w?.city ?? (snap.connectionState == ConnectionState.waiting ? 'Detecting…' : 'Unavailable'),
-                                  style: const TextStyle(color: AppTheme.textSecondary, fontSize: 11),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ]),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Find your vibe → MoodBoard
-          Expanded(
-            child: GestureDetector(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MoodBoardScreen())),
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: AppTheme.amberGradient,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.25), blurRadius: 16, offset: const Offset(0, 6))],
-                ),
-                child: Row(children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(color: AppTheme.primaryBlack, shape: BoxShape.circle),
-                    child: const Icon(LucideIcons.sparkles, color: AppTheme.accentAmber, size: 16),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('Find', style: TextStyle(color: AppTheme.primaryBlack, fontSize: 11, fontWeight: FontWeight.w600)),
-                        Text('Your Vibe →',
-                          style: TextStyle(color: AppTheme.primaryBlack.withOpacity(0.85), fontSize: 15, fontWeight: FontWeight.w800, letterSpacing: -0.3)),
-                      ],
-                    ),
-                  ),
-                ]),
-              ),
-            ),
-          ),
-        ],
-      ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.05, end: 0),
-    );
-  }
 
   // ─── Section Header ──────────────────────────────────────────────────────────
   Widget _buildSectionHeader(String title, IconData icon, {VoidCallback? onSeeAll}) {
@@ -683,115 +607,311 @@ class _HomeDashboardState extends State<HomeDashboard> {
     );
   }
 
-  // ─── Bottom banners row (Traveller Feed + Cost Diary) ────────────────────────
-  Widget _buildBottomBannerRow() {
+  // ─── The AI Suite (Premium Glassmorphic Stack layout) ────────────────────────
+  Widget _buildFeaturedInnovationsCarousel() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          // Traveller Feed
-          GestureDetector(
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TravellerFeedScreen())),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(24),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [AppTheme.accentViolet.withOpacity(0.22), AppTheme.accentTeal.withOpacity(0.12)],
-                      begin: Alignment.topLeft, end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: AppTheme.accentViolet.withOpacity(0.25)),
+          // Top Row: Two Squares
+          Row(
+            children: [
+              Expanded(
+                child: _buildGlassFeatureCard(
+                  title: 'Swipe Match',
+                  subtitle: 'Vibe & travel.',
+                  icon: LucideIcons.layers,
+                  gradient: const RadialGradient(
+                    center: Alignment.topLeft,
+                    radius: 1.5,
+                    colors: [Color(0xFFDD2476), Color(0xFFFF512F)],
                   ),
-                  child: Row(children: [
-                    Container(
-                      width: 52, height: 52,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        gradient: LinearGradient(colors: [AppTheme.accentViolet.withOpacity(0.5), AppTheme.accentTeal.withOpacity(0.3)]),
-                      ),
-                      child: const Icon(LucideIcons.headphones, color: Colors.white, size: 24),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Traveller Feed',
-                            style: TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.w800)),
-                          const SizedBox(height: 4),
-                          Text('Listen to real stories from fellow explorers',
-                            style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.8), fontSize: 12)),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: AppTheme.accentViolet.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(LucideIcons.chevronRight, color: AppTheme.accentViolet, size: 16),
-                    ),
-                  ]),
-                ),
+                  height: 160,
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TravelSwipeMatchScreen())),
+                ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.1, end: 0),
               ),
-            ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: _buildGlassFeatureCard(
+                  title: 'Blind Trip',
+                  subtitle: 'Take a risk.',
+                  icon: LucideIcons.dices,
+                  gradient: const RadialGradient(
+                    center: Alignment.topRight,
+                    radius: 1.5,
+                    colors: [Color(0xFF8B0000), Color(0xFF4B0082)],
+                  ),
+                  height: 160,
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const BlindTripSetupScreen())),
+                ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1, end: 0),
+              ),
+            ],
           ),
-
           const SizedBox(height: 14),
-
-          // Cost Diary
-          GestureDetector(
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CostDiaryScreen())),
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppTheme.accentAmber.withOpacity(0.12), AppTheme.accentTeal.withOpacity(0.08)],
-                  begin: Alignment.topLeft, end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: AppTheme.accentAmber.withOpacity(0.2)),
+          // Bottom Row: One wide rectangle + one tall one
+          Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: _buildGlassFeatureCard(
+                  title: 'AI Trip Journal',
+                  subtitle: 'Weave your memories.',
+                  icon: LucideIcons.feather,
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft, end: Alignment.bottomRight,
+                    colors: [Color(0xFF3A1C71), Color(0xFFD76D77), Color(0xFFFFAF7B)],
+                  ),
+                  height: 140,
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TripJournalScreen())),
+                ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.1, end: 0),
               ),
-              child: Row(children: [
-                Container(
-                  width: 52, height: 52,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: AppTheme.accentAmber.withOpacity(0.15),
+              const SizedBox(width: 14),
+              Expanded(
+                flex: 2,
+                child: _buildGlassFeatureCard(
+                  title: 'Passport',
+                  subtitle: 'Haptic stamps.',
+                  icon: LucideIcons.fingerprint,
+                  gradient: const LinearGradient(
+                    begin: Alignment.bottomLeft, end: Alignment.topRight,
+                    colors: [Color(0xFF141E30), Color(0xFF243B55)],
                   ),
-                  child: const Icon(LucideIcons.pieChart, color: AppTheme.accentAmber, size: 24),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Cost Diary',
-                        style: TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.w800)),
-                      const SizedBox(height: 4),
-                      Text('Track your travel expenses in real-time',
-                        style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.8), fontSize: 12)),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: AppTheme.accentAmber.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(LucideIcons.chevronRight, color: AppTheme.accentAmber, size: 16),
-                ),
-              ]),
-            ),
+                  height: 140,
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const DigitalPassportScreen())),
+                ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1, end: 0),
+              ),
+            ],
           ),
         ],
-      ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.06, end: 0),
+      ),
+    );
+  }
+
+  Widget _buildGlassFeatureCard({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required Gradient gradient,
+    required double height,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.lightImpact();
+        onTap();
+      },
+      child: Container(
+        height: height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          gradient: gradient,
+          boxShadow: [
+            BoxShadow(
+              color: gradient.colors.first.withOpacity(0.4),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            )
+          ],
+          border: Border.all(color: Colors.white.withOpacity(0.15)),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(28),
+          child: Stack(
+            children: [
+              // Massive background icon for texture
+              Positioned(
+                right: -20,
+                bottom: -20,
+                child: Icon(icon, size: 100, color: Colors.white.withOpacity(0.08)),
+              ),
+              // Glass noise/blur overlay
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Container(
+                  color: Colors.white.withOpacity(0.02),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.25),
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(color: Colors.white.withOpacity(0.1)),
+                          ),
+                          child: Icon(icon, color: Colors.white, size: 22),
+                        ),
+                        Icon(LucideIcons.arrowUpRight, color: Colors.white.withOpacity(0.5), size: 18),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(title, 
+                          maxLines: 1,
+                          style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: -0.5)),
+                        const SizedBox(height: 4),
+                        Text(subtitle, 
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ─── Quick Toolkit Grid (Magazine Layout) ────────────────────────────────────
+  Widget _buildToolkitGrid() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                flex: 5,
+                child: GestureDetector(
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MapScreen())),
+                  child: FutureBuilder<WeatherData?>(
+                    future: _weatherFuture,
+                    builder: (ctx, snap) {
+                      final w = snap.data;
+                      return Container(
+                        height: 105,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppTheme.surfaceLight,
+                          borderRadius: BorderRadius.circular(22),
+                          border: Border.all(color: Colors.white.withOpacity(0.05)),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(w?.icon ?? '🌤️', style: const TextStyle(fontSize: 32)),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    w != null ? '${w.tempC.round()}°C' : '—',
+                                    style: const TextStyle(color: AppTheme.accentTeal, fontSize: 22, fontWeight: FontWeight.w800),
+                                  ),
+                                  Text(
+                                    w?.city ?? (snap.connectionState == ConnectionState.waiting ? 'Wait…' : 'None'),
+                                    style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.1, end: 0),
+              const SizedBox(width: 14),
+              Expanded(
+                flex: 4,
+                child: _buildToolkitCard(
+                  title: 'Cost Diary',
+                  icon: LucideIcons.pieChart,
+                  color: AppTheme.accentAmber,
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CostDiaryScreen())),
+                ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.1, end: 0),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              Expanded(
+                child: _buildToolkitCard(
+                  title: 'Feed',
+                  icon: LucideIcons.headphones,
+                  color: AppTheme.accentViolet,
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TravellerFeedScreen())),
+                ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.1, end: 0),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                flex: 2,
+                child: GestureDetector(
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MoodBoardScreen())),
+                  child: Container(
+                    height: 105,
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    decoration: BoxDecoration(
+                      gradient: AppTheme.amberGradient,
+                      borderRadius: BorderRadius.circular(22),
+                      boxShadow: [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.2), blurRadius: 10, offset: const Offset(0, 4))],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: const BoxDecoration(color: AppTheme.primaryBlack, shape: BoxShape.circle),
+                          child: const Icon(LucideIcons.sparkles, color: AppTheme.accentAmber, size: 16),
+                        ),
+                        const Spacer(),
+                        const Text('Find Your Vibe', style: TextStyle(color: AppTheme.primaryBlack, fontWeight: FontWeight.w900, fontSize: 16, letterSpacing: -0.5)),
+                      ],
+                    ),
+                  ),
+                ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1, end: 0),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildToolkitCard({required String title, required IconData icon, required Color color, required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 105,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.12),
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: color.withOpacity(0.2)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(color: color.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
+              child: Icon(icon, color: color, size: 18),
+            ),
+            const Spacer(),
+            Text(title, style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.w800)),
+          ],
+        ),
+      ),
     );
   }
 }

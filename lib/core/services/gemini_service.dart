@@ -3,7 +3,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 
 class GeminiService {
   // ⚠️  For production: move this key to a Cloud Function to avoid APK exposure.
-  static const String _apiKey = 'AIzaSyAoOy2riUPF4CkFTpoPYxjuIMI0rDN0oGE';
+  static const String _apiKey = 'AIzaSyBzEf4ekGc7XVN_f7G00AXrGMEJnh6dOAI';
 
   final GenerativeModel _chatModel = GenerativeModel(
     model: 'gemini-3-flash-preview',
@@ -93,8 +93,99 @@ Write a private audio guide script that:
 
 Write only the narration — no titles, no preamble.
 ''';
-    final response = await _chatModel.generateContent([Content.text(prompt)]);
-    return response.text ?? 'This place holds a story only you know. Let it speak.';
+    try {
+      final response = await _chatModel.generateContent([Content.text(prompt)]);
+      if (response.text == null) throw Exception('API returned null response');
+      return response.text!;
+    } catch (e) {
+      throw Exception('Failed to match destination: $e');
+    }
+  }
+
+  /// FEATURE: The "Blind Trip" Roulette
+  /// Generates a surprise itinerary and packing hints, keeping the destination secret.
+  Future<String> generateBlindTripItinerary({
+    required double budget,
+    required int days,
+    required String vibe,
+  }) async {
+    final prompt = '''
+    You are a luxury travel concierge curating a "Blind Trip" for a client.
+    They do not want to know where they are going until the day before the flight.
+    Based on these constraints:
+    - Maximum Budget: \$${budget.toInt()} USD
+    - Duration: $days days
+    - Desired Vibe: $vibe
+
+    1. Pick an amazing, realistic travel destination that perfectly matches this vibe and budget from a major airport hub.
+    2. Create a high-end, exciting daily itinerary.
+    3. Crucially, generate 3-5 vague but helpful "packing hints" so they know what to put in their suitcase without revealing the destination (e.g., "Pack for brisk evenings around 50°F / 10°C", "Bring comfortable shoes for cobblestones", "A swimsuit is mandatory").
+
+    Return the response STRICTLY as a valid JSON object matching this exact structure, with no markdown formatting or extra text:
+    {
+      "destination": "The Chosen City, Country",
+      "tagline": "A compelling, cryptic 5-word tagline for the trip",
+      "packing_hints": ["Hint 1", "Hint 2", "Hint 3"],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival & Mystery",
+          "desc": "Check into your 5-star hidden oasis..."
+        } // ... repeat for $days days
+      ]
+    }
+    ''';
+
+    try {
+      final response = await _plannerModel.generateContent([Content.text(prompt)]);
+      if (response.text == null) throw Exception('API returned null response');
+      return response.text!;
+    } catch (e) {
+      throw Exception('Failed to generate blind trip: $e');
+    }
+  }
+
+  /// FEATURE: "Tinder for Travel" Swipe Match
+  /// Takes a list of explicit user preferences and builds a perfect city escape.
+  Future<String> generateItineraryFromMatches(List<String> matches) async {
+    final prompt = '''
+    You are a luxury travel concierge. 
+    The user has explicitly liked these travel aesthetics/activities: ${matches.join(", ")}. 
+
+    1. Pick the absolute best global destination that perfectly incorporates all or most of these exact aesthetics.
+    2. Build a high-end, exciting 3-day itinerary in that destination.
+
+    Return the response STRICTLY as a valid JSON object matching this exact structure, with no markdown formatting or extra text:
+    {
+      "destination": "The Best City, Country",
+      "tagline": "A compelling 5-word tagline",
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Welcome to Paradise",
+          "desc": "Check into your hotel and immediately go to..."
+        },
+        {
+          "day": 2,
+          "title": "Adventure awaits",
+          "desc": "Morning hike followed by..."
+        },
+        {
+          "day": 3,
+          "title": "Farewell",
+          "desc": "Final morning coffee at..."
+        }
+      ]
+    }
+    ''';
+
+    try {
+      final response = await _plannerModel.generateContent([Content.text(prompt)]);
+      if (response.text == null) throw Exception('API returned null response');
+      return response.text!;
+    } catch (e) {
+      throw Exception('Failed to generate synced itinerary: $e');
+    }
   }
 
   /// Mood Board Destination Matcher

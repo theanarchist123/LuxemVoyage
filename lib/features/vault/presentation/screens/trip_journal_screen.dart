@@ -8,7 +8,7 @@ import '../../../../core/services/firestore_service.dart';
 import 'journal_entry_screen.dart';
 
 class TripJournalScreen extends StatefulWidget {
-  const TripJournalScreen({Key? key}) : super(key: key);
+  const TripJournalScreen({super.key});
 
   @override
   State<TripJournalScreen> createState() => _TripJournalScreenState();

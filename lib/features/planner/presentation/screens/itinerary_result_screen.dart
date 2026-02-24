@@ -17,12 +17,12 @@ class ItineraryResultScreen extends StatefulWidget {
   final List<Map<String, dynamic>> itinerary;
 
   const ItineraryResultScreen({
-    Key? key,
+    super.key,
     required this.destination,
     required this.days,
     required this.tier,
     required this.itinerary,
-  }) : super(key: key);
+  });
 
   @override
   State<ItineraryResultScreen> createState() => _ItineraryResultScreenState();
@@ -101,9 +101,9 @@ class _ItineraryResultScreenState extends State<ItineraryResultScreen> {
               gradient: AppTheme.amberGradient,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Row(
+            child: const Row(
               mainAxisSize: MainAxisSize.min,
-              children: const [
+              children: [
                 Icon(LucideIcons.sparkles, color: AppTheme.primaryBlack, size: 12),
                 SizedBox(width: 4),
                 Text("AI", style: TextStyle(color: AppTheme.primaryBlack, fontSize: 11, fontWeight: FontWeight.w800)),

@@ -10,7 +10,7 @@ import '../../../../core/services/places_service.dart';
 import '../../../experiences/presentation/screens/create_experience_screen.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({Key? key}) : super(key: key);
+  const MapScreen({super.key});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -254,7 +254,7 @@ class _MapScreenState extends State<MapScreen> {
             )
           else if (_searchController.text.isNotEmpty)
             IconButton(
-              icon: Icon(LucideIcons.x, color: AppTheme.textSecondary, size: 16),
+              icon: const Icon(LucideIcons.x, color: AppTheme.textSecondary, size: 16),
               onPressed: () { _searchController.clear(); setState(() {}); },
             )
           else
@@ -313,7 +313,7 @@ class _MapScreenState extends State<MapScreen> {
                 color: Colors.white.withOpacity(0.05),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(LucideIcons.x, color: AppTheme.textSecondary, size: 16),
+              child: const Icon(LucideIcons.x, color: AppTheme.textSecondary, size: 16),
             ),
           ),
         ],

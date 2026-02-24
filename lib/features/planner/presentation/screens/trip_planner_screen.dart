@@ -8,7 +8,10 @@ import '../../../../core/services/gemini_service.dart';
 import 'itinerary_result_screen.dart';
 
 class TripPlannerScreen extends StatefulWidget {
-  const TripPlannerScreen({Key? key}) : super(key: key);
+  final String? preselectedDestination;
+  final String? preselectedImageUrl;
+
+  const TripPlannerScreen({super.key, this.preselectedDestination, this.preselectedImageUrl});
 
   @override
   State<TripPlannerScreen> createState() => _TripPlannerScreenState();
@@ -28,11 +31,26 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
     {'name': 'Maldives', 'image': 'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?q=80&w=400&auto=format&fit=crop', 'emoji': '🏝️'},
     {'name': 'Santorini, Greece', 'image': 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=400&auto=format&fit=crop', 'emoji': '🏛️'},
     {'name': 'Kyoto, Japan', 'image': 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=400&auto=format&fit=crop', 'emoji': '⛩️'},
-    {'name': 'Amalfi Coast', 'image': 'https://images.unsplash.com/photo-1533934661936-71e0f03b5ded?q=80&w=400&auto=format&fit=crop', 'emoji': '🌊'},
+    {'name': 'Amalfi Coast', 'image': 'https://images.unsplash.com/photo-1612698093158-e07ac200d44e?q=80&w=400&auto=format&fit=crop', 'emoji': '🌊'},
     {'name': 'Bali, Indonesia', 'image': 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=400&auto=format&fit=crop', 'emoji': '🌴'},
     {'name': 'Dubai, UAE', 'image': 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=400&auto=format&fit=crop', 'emoji': '🏙️'},
     {'name': 'Machu Picchu', 'image': 'https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=400&auto=format&fit=crop', 'emoji': '🏔️'},
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.preselectedDestination != null && widget.preselectedDestination!.isNotEmpty) {
+      // Insert the AI-suggested destination at the beginning
+      _destinations.insert(0, {
+        'name': widget.preselectedDestination!,
+        'image': widget.preselectedImageUrl ?? 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=400&auto=format&fit=crop',
+        'emoji': '✨',
+      });
+      _selectedDestination = widget.preselectedDestination!;
+      _step = 1; // Skip destination selection and go straight to duration
+    }
+  }
 
   final List<Map<String, String>> _tiers = [
     {'name': 'Premium', 'desc': '4-star hotels · Group tours · Fine dining', 'icon': '⭐'},
@@ -72,7 +90,7 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
       Navigator.push(context, MaterialPageRoute(
         builder: (_) => ItineraryResultScreen(
           destination: _selectedDestination, days: _days, tier: _tiers[_selectedTier]['name']!,
-          itinerary: [{'day': 1, 'title': 'Error', 'desc': e.toString(), 'activities': []}],
+          itinerary: [{'day': 1, 'title': 'Error', 'desc': e.toString(), 'activities': const []}],
         ),
       ));
     }
@@ -80,18 +98,21 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(gradient: AppTheme.screenGradient),
-      child: SafeArea(
-        child: Column(
-          children: [
-            _buildHeader(),
-            const SizedBox(height: 16),
-            _buildStepBar(),
-            const SizedBox(height: 24),
-            Expanded(child: _buildCurrentStep()),
-            _buildBottomAction(),
-          ],
+    return Scaffold(
+      backgroundColor: AppTheme.primaryBlack,
+      body: Container(
+        decoration: const BoxDecoration(gradient: AppTheme.screenGradient),
+        child: SafeArea(
+          child: Column(
+            children: [
+              _buildHeader(),
+              const SizedBox(height: 16),
+              _buildStepBar(),
+              const SizedBox(height: 24),
+              Expanded(child: _buildCurrentStep()),
+              _buildBottomAction(),
+            ],
+          ),
         ),
       ),
     );

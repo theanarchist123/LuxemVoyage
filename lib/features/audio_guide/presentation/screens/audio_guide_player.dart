@@ -9,7 +9,7 @@ import '../../../../core/services/gemini_service.dart';
 class AudioGuidePlayer extends StatefulWidget {
   final String placeName;
   final String? customScript; // Pre-generated script (Custom Experience flow)
-  const AudioGuidePlayer({Key? key, this.placeName = 'Louvre', this.customScript}) : super(key: key);
+  const AudioGuidePlayer({super.key, this.placeName = 'Louvre', this.customScript});
 
   @override
   State<AudioGuidePlayer> createState() => _AudioGuidePlayerState();

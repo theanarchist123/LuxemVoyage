@@ -12,7 +12,7 @@ import 'features/profile/presentation/screens/profile_screen.dart';
 import 'features/chat/presentation/screens/chat_screen.dart';
 
 class MainScaffold extends StatefulWidget {
-  const MainScaffold({Key? key}) : super(key: key);
+  const MainScaffold({super.key});
 
   @override
   State<MainScaffold> createState() => _MainScaffoldState();
@@ -127,7 +127,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     // Feature 5: Live Concierge Mode — Glowing Teal Orb
     // In a real app, logic would check if an itinerary is "active" today.
     // For presentation, we assume it is active.
-    final String activeTripContext = "Welcome to Paris! You're on Day 2 of your Elite luxury journey. The Arc de Triomphe opens in 2 hours — shall I find you a table nearby for breakfast?";
+    const String activeTripContext = "Welcome to Paris! You're on Day 2 of your Elite luxury journey. The Arc de Triomphe opens in 2 hours — shall I find you a table nearby for breakfast?";
 
     return Container(
       decoration: BoxDecoration(

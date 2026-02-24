@@ -8,7 +8,7 @@ import '../../../../core/services/firestore_service.dart';
 import '../../../../features/planner/presentation/screens/itinerary_result_screen.dart';
 
 class CollectionsScreen extends StatefulWidget {
-  const CollectionsScreen({Key? key}) : super(key: key);
+  const CollectionsScreen({super.key});
 
   @override
   State<CollectionsScreen> createState() => _CollectionsScreenState();
@@ -30,7 +30,7 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
     'Maldives': 'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?q=80&w=600',
     'Santorini': 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=600',
     'Kyoto': 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=600',
-    'Amalfi': 'https://images.unsplash.com/photo-1533934661936-71e0f03b5ded?q=80&w=600',
+    'Amalfi': 'https://images.unsplash.com/photo-1612698093158-e07ac200d44e?q=80&w=600',
     'Bali': 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=600',
     'Dubai': 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=600',
     'Machu': 'https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=600',

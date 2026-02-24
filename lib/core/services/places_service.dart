@@ -45,7 +45,7 @@ class PlaceData {
 
 class PlacesService {
   // Uses the same API key as defined in AndroidManifest.xml
-  static const String _apiKey = 'AIzaSyBItX7wzj21AldWuL1xiUoZr36JzE67chU';
+  static const String _apiKey = 'AIzaSyAYF9ZttKXHieF5cgWRbuqlQSSe1G94A0w';
   final FirestoreService _firestoreService = FirestoreService();
 
   Future<List<PlaceData>> searchPlaces(String query) async {

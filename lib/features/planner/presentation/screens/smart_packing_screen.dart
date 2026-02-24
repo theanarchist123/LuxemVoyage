@@ -8,7 +8,7 @@ class SmartPackingScreen extends StatefulWidget {
   final String destination;
   final List<dynamic> itinerary;
 
-  const SmartPackingScreen({Key? key, required this.destination, required this.itinerary}) : super(key: key);
+  const SmartPackingScreen({super.key, required this.destination, required this.itinerary});
 
   @override
   State<SmartPackingScreen> createState() => _SmartPackingScreenState();

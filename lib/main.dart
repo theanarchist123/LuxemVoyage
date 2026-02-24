@@ -12,7 +12,7 @@ void main() async {
 }
 
 class LuxeVoyageApp extends StatelessWidget {
-  const LuxeVoyageApp({Key? key}) : super(key: key);
+  const LuxeVoyageApp({super.key});
 
   @override
   Widget build(BuildContext context) {

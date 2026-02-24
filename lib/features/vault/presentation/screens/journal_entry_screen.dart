@@ -10,7 +10,7 @@ import '../../../../core/services/firestore_service.dart';
 
 class JournalEntryScreen extends StatefulWidget {
   final List<QueryDocumentSnapshot> selectedMemories;
-  const JournalEntryScreen({Key? key, required this.selectedMemories}) : super(key: key);
+  const JournalEntryScreen({super.key, required this.selectedMemories});
 
   @override
   State<JournalEntryScreen> createState() => _JournalEntryScreenState();

@@ -12,7 +12,20 @@
           "package_name": "com.example.luxevoyage"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "204872344046-phsjbofnpnuj9351colu6t7o46iarj3b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.luxevoyage",
+            "certificate_hash": "6960ea6a670c95f8d620c3ce59ff2f6196fff02d"
+          }
+        },
+        {
+          "client_id": "204872344046-oh1ssoh53l54t770tjbn1mnl0q51mqcm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAV1FZs5uTcoHCxtb7m7Z6FLTshL4OmsnU"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "204872344046-oh1ssoh53l54t770tjbn1mnl0q51mqcm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

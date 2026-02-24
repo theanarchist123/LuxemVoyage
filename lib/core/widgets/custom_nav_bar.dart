@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:circle_nav_bar/circle_nav_bar.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../theme/app_theme.dart';
@@ -38,7 +39,10 @@ class CustomNavBar extends StatelessWidget {
           height: 60,
           circleWidth: 60,
           activeIndex: currentIndex,
-          onTap: onTap,
+          onTap: (index) {
+            HapticFeedback.lightImpact();
+            onTap(index);
+          },
           shadowColor: Colors.black.withOpacity(0.3),
           elevation: 8,
         ),

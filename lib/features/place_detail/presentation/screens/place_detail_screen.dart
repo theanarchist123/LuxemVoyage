@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -32,7 +33,10 @@ class PlaceDetailScreen extends StatelessWidget {
                 pinned: true,
                 backgroundColor: AppTheme.primaryBlack,
                 leading: GestureDetector(
-                  onTap: () => Navigator.pop(context),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.pop(context);
+                  },
                   child: Container(
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(

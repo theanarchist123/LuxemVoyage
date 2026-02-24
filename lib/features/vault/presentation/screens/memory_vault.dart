@@ -12,7 +12,7 @@ import '../../../../core/services/firestore_service.dart';
 import 'trip_journal_screen.dart';
 
 class MemoryVault extends StatefulWidget {
-  const MemoryVault({Key? key}) : super(key: key);
+  const MemoryVault({super.key});
 
   @override
   State<MemoryVault> createState() => _MemoryVaultState();
@@ -226,12 +226,12 @@ class _MemoryVaultState extends State<MemoryVault> {
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(color: AppTheme.accentViolet.withOpacity(0.3)),
               ),
-              child: Row(
+              child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(LucideIcons.penTool, color: AppTheme.accentViolet, size: 16),
-                  const SizedBox(width: 8),
-                  const Text("Journal", style: TextStyle(color: AppTheme.accentViolet, fontSize: 13, fontWeight: FontWeight.w700)),
+                  Icon(LucideIcons.penTool, color: AppTheme.accentViolet, size: 16),
+                  SizedBox(width: 8),
+                  Text("Journal", style: TextStyle(color: AppTheme.accentViolet, fontSize: 13, fontWeight: FontWeight.w700)),
                 ],
               ),
             ),
@@ -390,7 +390,7 @@ class _MemoryVaultState extends State<MemoryVault> {
 class _MemoryCard extends StatelessWidget {
   final String url, caption, location;
 
-  const _MemoryCard({Key? key, required this.url, required this.caption, required this.location}) : super(key: key);
+  const _MemoryCard({super.key, required this.url, required this.caption, required this.location});
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
 
 class GoldButton extends StatefulWidget {
@@ -22,7 +23,10 @@ class GoldButton extends StatefulWidget {
 class _GoldButtonState extends State<GoldButton> with SingleTickerProviderStateMixin {
   double _scale = 1.0;
 
-  void _onTapDown(TapDownDetails _) => setState(() => _scale = 0.96);
+  void _onTapDown(TapDownDetails _) {
+    HapticFeedback.lightImpact();
+    setState(() => _scale = 0.96);
+  }
   void _onTapUp(TapUpDetails _) => setState(() => _scale = 1.0);
   void _onTapCancel() => setState(() => _scale = 1.0);
 

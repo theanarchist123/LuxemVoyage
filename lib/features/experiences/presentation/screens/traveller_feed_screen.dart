@@ -6,7 +6,7 @@ import '../../../audio_guide/presentation/screens/audio_guide_player.dart';
 import '../../../../core/services/places_service.dart';
 
 class TravellerFeedScreen extends StatefulWidget {
-  const TravellerFeedScreen({Key? key}) : super(key: key);
+  const TravellerFeedScreen({super.key});
 
   @override
   State<TravellerFeedScreen> createState() => _TravellerFeedScreenState();

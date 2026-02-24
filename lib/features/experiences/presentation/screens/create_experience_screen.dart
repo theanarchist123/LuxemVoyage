@@ -14,11 +14,11 @@ class CreateExperienceScreen extends StatefulWidget {
   final double? longitude;
 
   const CreateExperienceScreen({
-    Key? key,
+    super.key,
     this.prefilledLocation,
     this.latitude,
     this.longitude,
-  }) : super(key: key);
+  });
 
   @override
   State<CreateExperienceScreen> createState() => _CreateExperienceScreenState();

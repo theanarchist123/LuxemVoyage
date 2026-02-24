@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       // Logo
                       Center(
                         child: Container(
-                          width: 56, height: 56,
+                          width: 120, height: 120,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: LinearGradient(colors: [
@@ -140,9 +140,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             ]),
                             border: Border.all(color: AppTheme.accentAmber.withOpacity(0.5)),
                           ),
-                          child: const Center(
-                            child: Text("L",
-                                style: TextStyle(color: AppTheme.accentAmber, fontSize: 24, fontWeight: FontWeight.w800)),
+                          child: Center(
+                            child: Image.asset(
+                              'ChatGPT_Image_Feb_22__2026__05_45_13_PM-removebg-preview.png',
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
                       ).animate().fadeIn(duration: 500.ms).scale(begin: const Offset(0.8, 0.8)),

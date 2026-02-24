@@ -13,7 +13,7 @@ class ChatMessage {
 
 class ChatScreen extends StatefulWidget {
   final String? initialContextMessage;
-  const ChatScreen({Key? key, this.initialContextMessage}) : super(key: key);
+  const ChatScreen({super.key, this.initialContextMessage});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -122,7 +122,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           Container(
             width: 40, height: 40,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: AppTheme.amberGradient,
               shape: BoxShape.circle,
             ),
@@ -135,7 +135,7 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 const Text("AI Concierge", style: TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.w700)),
                 Row(children: [
-                  Container(width: 6, height: 6, decoration: BoxDecoration(color: AppTheme.accentTeal, shape: BoxShape.circle)),
+                  Container(width: 6, height: 6, decoration: const BoxDecoration(color: AppTheme.accentTeal, shape: BoxShape.circle)),
                   const SizedBox(width: 5),
                   Text("Online · Gemini", style: TextStyle(color: AppTheme.accentTeal.withOpacity(0.8), fontSize: 12, fontWeight: FontWeight.w500)),
                 ]),
@@ -158,7 +158,7 @@ class _ChatScreenState extends State<ChatScreen> {
             Container(
               margin: const EdgeInsets.only(right: 8),
               width: 30, height: 30,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: AppTheme.amberGradient,
                 shape: BoxShape.circle,
               ),

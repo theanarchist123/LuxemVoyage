@@ -7,11 +7,11 @@ class PremiumTextField extends StatelessWidget {
   final bool obscureText;
 
   const PremiumTextField({
-    Key? key,
+    super.key,
     required this.hintText,
     required this.prefixIcon,
     this.obscureText = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

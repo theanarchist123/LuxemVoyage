@@ -4,9 +4,11 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/gemini_service.dart';
+import '../../../../core/services/unsplash_service.dart';
+import 'trip_planner_screen.dart';
 
 class MoodBoardScreen extends StatefulWidget {
-  const MoodBoardScreen({Key? key}) : super(key: key);
+  const MoodBoardScreen({super.key});
 
   @override
   State<MoodBoardScreen> createState() => _MoodBoardScreenState();
@@ -246,6 +248,15 @@ class _MoodBoardScreenState extends State<MoodBoardScreen> {
     setState(() => _isLoading = true);
     try {
       final result = await GeminiService().matchDestinationFromMoods(_selected.toList());
+      
+      // Fetch dynamic image from Unsplash
+      final imageQuery = result['imageQuery'] as String? ?? result['destination'] as String? ?? 'beautiful landscape';
+      final unsplashUrl = await UnsplashService().getDestinationImageUrl(imageQuery);
+      
+      if (unsplashUrl != null) {
+        result['unsplash_image'] = unsplashUrl;
+      }
+
       if (!mounted) return;
       setState(() => _isLoading = false);
       Navigator.push(context, PageRouteBuilder(
@@ -301,7 +312,9 @@ class _DestinationRevealScreenState extends State<_DestinationRevealScreen>
     final tagline = widget.result['tagline'] as String? ?? '';
     final why = widget.result['why'] as String? ?? '';
     final highlights = (widget.result['highlights'] as List?)?.cast<String>() ?? [];
-    final imageUrl = _getImageUrl(destination);
+    
+    // Use the dynamic Unsplash image if available, else fallback
+    final imageUrl = widget.result['unsplash_image'] as String? ?? _getImageUrl(destination);
 
     return Scaffold(
       backgroundColor: AppTheme.primaryBlack,
@@ -396,10 +409,10 @@ class _DestinationRevealScreenState extends State<_DestinationRevealScreen>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(children: [
-                            const Icon(LucideIcons.sparkles, color: AppTheme.accentAmber, size: 16),
-                            const SizedBox(width: 8),
-                            const Text('Why this destination?',
+                          const Row(children: [
+                            Icon(LucideIcons.sparkles, color: AppTheme.accentAmber, size: 16),
+                            SizedBox(width: 8),
+                            Text('Why this destination?',
                                 style: TextStyle(color: AppTheme.accentAmber, fontSize: 13, fontWeight: FontWeight.w700)),
                           ]),
                           const SizedBox(height: 12),
@@ -435,7 +448,21 @@ class _DestinationRevealScreenState extends State<_DestinationRevealScreen>
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: GestureDetector(
-                        onTap: () => Navigator.pop(context),
+                        onTap: () {
+                          // Pass data to TripPlannerScreen
+                          Navigator.pushReplacement(context, PageRouteBuilder(
+                            transitionDuration: const Duration(milliseconds: 500),
+                            pageBuilder: (_, __, ___) => TripPlannerScreen(
+                              preselectedDestination: destination,
+                              preselectedImageUrl: imageUrl,
+                            ),
+                            transitionsBuilder: (_, animation, __, child) => SlideTransition(
+                              position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
+                                  .animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+                              child: child,
+                            ),
+                          ));
+                        },
                         child: Container(
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(vertical: 16),

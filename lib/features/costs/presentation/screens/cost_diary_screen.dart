@@ -5,7 +5,7 @@ import 'dart:math' as math;
 import '../../../../core/theme/app_theme.dart';
 
 class CostDiaryScreen extends StatefulWidget {
-  const CostDiaryScreen({Key? key}) : super(key: key);
+  const CostDiaryScreen({super.key});
 
   @override
   State<CostDiaryScreen> createState() => _CostDiaryScreenState();
