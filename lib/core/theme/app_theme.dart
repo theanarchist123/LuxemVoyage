@@ -51,10 +51,10 @@ class AppTheme {
     double opacity = 0.06,
   }) {
     return BoxDecoration(
-      color: Colors.white.withOpacity(opacity),
+      color: Colors.white.withValues(alpha: opacity),
       borderRadius: BorderRadius.circular(borderRadius),
       border: Border.all(
-        color: borderColor ?? Colors.white.withOpacity(0.08),
+        color: borderColor ?? Colors.white.withValues(alpha: 0.08),
       ),
     );
   }
@@ -64,11 +64,11 @@ class AppTheme {
     bool withShadow = true,
   }) {
     return BoxDecoration(
-      color: surfaceDark.withOpacity(0.7),
+      color: surfaceDark.withValues(alpha: 0.7),
       borderRadius: BorderRadius.circular(borderRadius),
-      border: Border.all(color: Colors.white.withOpacity(0.06)),
+      border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
       boxShadow: withShadow
-          ? [BoxShadow(color: Colors.black.withOpacity(0.25), blurRadius: 20, offset: const Offset(0, 8))]
+          ? [BoxShadow(color: Colors.black.withValues(alpha: 0.25), blurRadius: 20, offset: const Offset(0, 8))]
           : null,
     );
   }
@@ -120,7 +120,7 @@ class AppTheme {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.06)),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.06)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/places_service.dart';
 import '../../../../core/services/weather_service.dart';
@@ -57,7 +58,7 @@ const List<Map<String, String>> _trendingQueries = [
 // ─── Main widget ──────────────────────────────────────────────────────────────
 
 class HomeDashboard extends StatefulWidget {
-  const HomeDashboard({Key? key}) : super(key: key);
+  const HomeDashboard({super.key});
 
   @override
   State<HomeDashboard> createState() => _HomeDashboardState();
@@ -162,32 +163,32 @@ class _HomeDashboardState extends State<HomeDashboard> {
       child: SafeArea(
         bottom: false,
         child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           slivers: [
             SliverToBoxAdapter(child: _buildHeroSection()),
-            SliverToBoxAdapter(child: const SizedBox(height: 32)),
+            const SliverToBoxAdapter(child: SizedBox(height: 32)),
             SliverToBoxAdapter(child: _buildSectionHeader('The AI Suite', LucideIcons.sparkles)),
-            SliverToBoxAdapter(child: const SizedBox(height: 16)),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
             SliverToBoxAdapter(child: _buildFeaturedInnovationsCarousel()),
-            SliverToBoxAdapter(child: const SizedBox(height: 36)),
+            const SliverToBoxAdapter(child: SizedBox(height: 36)),
             SliverToBoxAdapter(child: _buildSectionHeader('Travel Toolkit', LucideIcons.briefcase)),
-            SliverToBoxAdapter(child: const SizedBox(height: 16)),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
             SliverToBoxAdapter(child: _buildToolkitGrid()),
-            SliverToBoxAdapter(child: const SizedBox(height: 36)),
+            const SliverToBoxAdapter(child: SizedBox(height: 36)),
             SliverToBoxAdapter(child: _buildQuickActions()),
-            SliverToBoxAdapter(child: const SizedBox(height: 36)),
+            const SliverToBoxAdapter(child: SizedBox(height: 36)),
             SliverToBoxAdapter(child: _buildSectionHeader('Curated Experiences', LucideIcons.compass, onSeeAll: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const TravellerFeedScreen()));
             })),
-            SliverToBoxAdapter(child: const SizedBox(height: 16)),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
             SliverToBoxAdapter(child: _buildExperiencesList()),
-            SliverToBoxAdapter(child: const SizedBox(height: 36)),
+            const SliverToBoxAdapter(child: SizedBox(height: 36)),
             SliverToBoxAdapter(child: _buildSectionHeader('Trending Destinations', LucideIcons.trendingUp, onSeeAll: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const MapScreen()));
             })),
-            SliverToBoxAdapter(child: const SizedBox(height: 16)),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
             SliverToBoxAdapter(child: _buildTrendingSection()),
-            SliverToBoxAdapter(child: const SizedBox(height: 120)),
+            const SliverToBoxAdapter(child: SizedBox(height: 120)),
           ],
         ),
       ),
@@ -217,8 +218,8 @@ class _HomeDashboardState extends State<HomeDashboard> {
               key: ValueKey(heroUrl),
               height: 310,
               width: double.infinity,
-              child: Image.network(heroUrl, fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(color: AppTheme.surfaceDark)),
+              child: CachedNetworkImage(imageUrl: heroUrl, fit: BoxFit.cover,
+                  errorWidget: (_, __, ___) => Container(color: AppTheme.surfaceDark)),
             ),
           ),
         ),
@@ -239,10 +240,10 @@ class _HomeDashboardState extends State<HomeDashboard> {
                   end: Alignment.bottomCenter,
                   stops: const [0.0, 0.35, 0.7, 1.0],
                   colors: [
-                    AppTheme.primaryBlack.withOpacity(0.72),
-                    AppTheme.primaryBlack.withOpacity(0.28),
-                    AppTheme.primaryBlack.withOpacity(0.55),
-                    AppTheme.primaryBlack.withOpacity(0.97),
+                    AppTheme.primaryBlack.withValues(alpha: 0.72),
+                    AppTheme.primaryBlack.withValues(alpha: 0.28),
+                    AppTheme.primaryBlack.withValues(alpha: 0.55),
+                    AppTheme.primaryBlack.withValues(alpha: 0.97),
                   ],
                 ),
               ),
@@ -260,7 +261,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(_getGreeting(),
-                      style: TextStyle(fontSize: 13, color: AppTheme.textPrimary.withOpacity(0.75), fontWeight: FontWeight.w500)),
+                      style: TextStyle(fontSize: 13, color: AppTheme.textPrimary.withValues(alpha: 0.75), fontWeight: FontWeight.w500)),
                     const SizedBox(height: 3),
                     Row(children: [
                       Text(displayName,
@@ -289,7 +290,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                     child: CircleAvatar(
                       radius: 21,
                       backgroundColor: AppTheme.surfaceDark,
-                      backgroundImage: photoUrl != null && photoUrl.isNotEmpty ? NetworkImage(photoUrl) : null,
+                      backgroundImage: photoUrl != null && photoUrl.isNotEmpty ? CachedNetworkImageProvider(photoUrl) : null,
                       child: photoUrl == null || photoUrl.isEmpty
                           ? const Icon(LucideIcons.user, color: AppTheme.accentAmber, size: 20)
                           : null,
@@ -314,7 +315,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
               ),
               const SizedBox(height: 6),
               Text('Discover world-class destinations',
-                style: TextStyle(fontSize: 14, color: AppTheme.textPrimary.withOpacity(0.7), fontWeight: FontWeight.w400)),
+                style: TextStyle(fontSize: 14, color: AppTheme.textPrimary.withValues(alpha: 0.7), fontWeight: FontWeight.w400)),
             ],
           ).animate().fadeIn(delay: 150.ms, duration: 600.ms).slideY(begin: 0.06, end: 0),
         ),
@@ -333,7 +334,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                   width: _heroIndex == i ? 22 : 6,
                   height: 6,
                   decoration: BoxDecoration(
-                    color: _heroIndex == i ? AppTheme.accentAmber : Colors.white.withOpacity(0.4),
+                    color: _heroIndex == i ? AppTheme.accentAmber : Colors.white.withValues(alpha: 0.4),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -358,9 +359,9 @@ class _HomeDashboardState extends State<HomeDashboard> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.12),
+                    color: Colors.white.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: Colors.white.withOpacity(0.18)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
                   ),
                   child: Row(
                     children: [
@@ -368,7 +369,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text('Search destinations, hotels…',
-                          style: TextStyle(color: AppTheme.textPrimary.withOpacity(0.55), fontSize: 14)),
+                          style: TextStyle(color: AppTheme.textPrimary.withValues(alpha: 0.55), fontSize: 14)),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -378,7 +379,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                         child: Container(
                           padding: const EdgeInsets.all(7),
                           decoration: BoxDecoration(
-                            color: AppTheme.accentAmber.withOpacity(0.15),
+                            color: AppTheme.accentAmber.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Icon(LucideIcons.slidersHorizontal, color: AppTheme.accentAmber, size: 15),
@@ -413,7 +414,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
       height: 80,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: _quickActions.length,
         itemBuilder: (ctx, i) {
@@ -430,8 +431,8 @@ class _HomeDashboardState extends State<HomeDashboard> {
                     decoration: BoxDecoration(
                       color: AppTheme.surfaceLight,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withOpacity(0.07)),
-                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.22), blurRadius: 10, offset: const Offset(0, 4))],
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.07)),
+                      boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.22), blurRadius: 10, offset: const Offset(0, 4))],
                     ),
                     child: Icon(item['icon'] as IconData, color: AppTheme.accentAmber, size: 22),
                   ),
@@ -465,7 +466,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
           GestureDetector(
             onTap: onSeeAll,
             child: Text('See all',
-              style: TextStyle(color: AppTheme.accentAmber.withOpacity(0.85), fontSize: 13, fontWeight: FontWeight.w600)),
+              style: TextStyle(color: AppTheme.accentAmber.withValues(alpha: 0.85), fontSize: 13, fontWeight: FontWeight.w600)),
           ),
       ]),
     ).animate().fadeIn(delay: 200.ms);
@@ -495,7 +496,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
           }
           return ListView.builder(
             scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             padding: const EdgeInsets.symmetric(horizontal: 20),
             itemCount: cards.length,
             itemBuilder: (ctx, i) => _ExperienceCard(
@@ -526,7 +527,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
 
           return ListView.builder(
             scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             padding: const EdgeInsets.symmetric(horizontal: 20),
             itemCount: items.length,
             itemBuilder: (ctx, i) {
@@ -549,21 +550,21 @@ class _HomeDashboardState extends State<HomeDashboard> {
                   margin: const EdgeInsets.only(right: 14),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(22),
-                    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.4), blurRadius: 18, offset: const Offset(0, 8))],
+                    boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 18, offset: const Offset(0, 8))],
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(22),
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        Image.network(t['imageUrl']!, fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Container(color: AppTheme.surfaceDark)),
+                        CachedNetworkImage(imageUrl: t['imageUrl']!, fit: BoxFit.cover,
+                            errorWidget: (_, __, ___) => Container(color: AppTheme.surfaceDark)),
                         DecoratedBox(
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.topLeft, end: Alignment.bottomCenter,
                               stops: const [0.1, 1.0],
-                              colors: [Colors.transparent, AppTheme.primaryBlack.withOpacity(0.9)],
+                              colors: [Colors.transparent, AppTheme.primaryBlack.withValues(alpha: 0.9)],
                             ),
                           ),
                         ),
@@ -572,7 +573,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
                             decoration: BoxDecoration(
-                              color: tagColors[i % tagColors.length].withOpacity(0.92),
+                              color: tagColors[i % tagColors.length].withValues(alpha: 0.92),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(t['tag']!,
@@ -588,7 +589,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                                 style: const TextStyle(color: AppTheme.textPrimary, fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: -0.3)),
                               const SizedBox(height: 2),
                               Row(children: [
-                                Icon(LucideIcons.mapPin, color: AppTheme.accentAmber.withOpacity(0.8), size: 11),
+                                Icon(LucideIcons.mapPin, color: AppTheme.accentAmber.withValues(alpha: 0.8), size: 11),
                                 const SizedBox(width: 3),
                                 Text(t['subtitle']!, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
                               ]),
@@ -707,12 +708,12 @@ class _HomeDashboardState extends State<HomeDashboard> {
           gradient: gradient,
           boxShadow: [
             BoxShadow(
-              color: gradient.colors.first.withOpacity(0.4),
+              color: gradient.colors.first.withValues(alpha: 0.4),
               blurRadius: 20,
               offset: const Offset(0, 10),
             )
           ],
-          border: Border.all(color: Colors.white.withOpacity(0.15)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(28),
@@ -722,13 +723,13 @@ class _HomeDashboardState extends State<HomeDashboard> {
               Positioned(
                 right: -20,
                 bottom: -20,
-                child: Icon(icon, size: 100, color: Colors.white.withOpacity(0.08)),
+                child: Icon(icon, size: 100, color: Colors.white.withValues(alpha: 0.08)),
               ),
               // Glass noise/blur overlay
               BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                 child: Container(
-                  color: Colors.white.withOpacity(0.02),
+                  color: Colors.white.withValues(alpha: 0.02),
                 ),
               ),
               Padding(
@@ -743,13 +744,13 @@ class _HomeDashboardState extends State<HomeDashboard> {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.25),
+                            color: Colors.black.withValues(alpha: 0.25),
                             borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: Colors.white.withOpacity(0.1)),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                           ),
                           child: Icon(icon, color: Colors.white, size: 22),
                         ),
-                        Icon(LucideIcons.arrowUpRight, color: Colors.white.withOpacity(0.5), size: 18),
+                        Icon(LucideIcons.arrowUpRight, color: Colors.white.withValues(alpha: 0.5), size: 18),
                       ],
                     ),
                     Column(
@@ -762,7 +763,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                         Text(subtitle, 
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12)),
+                          style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 12)),
                       ],
                     ),
                   ],
@@ -797,7 +798,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                         decoration: BoxDecoration(
                           color: AppTheme.surfaceLight,
                           borderRadius: BorderRadius.circular(22),
-                          border: Border.all(color: Colors.white.withOpacity(0.05)),
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -862,7 +863,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                     decoration: BoxDecoration(
                       gradient: AppTheme.amberGradient,
                       borderRadius: BorderRadius.circular(22),
-                      boxShadow: [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.2), blurRadius: 10, offset: const Offset(0, 4))],
+                      boxShadow: [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))],
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -894,9 +895,9 @@ class _HomeDashboardState extends State<HomeDashboard> {
         height: 105,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.12),
+          color: color.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: color.withOpacity(0.2)),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -904,7 +905,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
           children: [
             Container(
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(color: color.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(12)),
               child: Icon(icon, color: color, size: 18),
             ),
             const Spacer(),
@@ -950,9 +951,9 @@ class _SearchSheetState extends State<_SearchSheet> {
           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
             decoration: BoxDecoration(
-              color: AppTheme.surfaceDark.withOpacity(0.95),
+              color: AppTheme.surfaceDark.withValues(alpha: 0.95),
               borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-              border: Border(top: BorderSide(color: Colors.white.withOpacity(0.08))),
+              border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.08))),
             ),
             padding: EdgeInsets.only(
               left: 20, right: 20, top: 20,
@@ -965,7 +966,7 @@ class _SearchSheetState extends State<_SearchSheet> {
                 // drag handle
                 Center(
                   child: Container(width: 36, height: 4,
-                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(2))),
+                    decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(2))),
                 ),
                 const SizedBox(height: 20),
                 // Search input
@@ -973,7 +974,7 @@ class _SearchSheetState extends State<_SearchSheet> {
                   decoration: BoxDecoration(
                     color: AppTheme.surfaceLight,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppTheme.accentAmber.withOpacity(0.3)),
+                    border: Border.all(color: AppTheme.accentAmber.withValues(alpha: 0.3)),
                   ),
                   child: TextField(
                     controller: _ctrl,
@@ -981,7 +982,7 @@ class _SearchSheetState extends State<_SearchSheet> {
                     style: const TextStyle(color: AppTheme.textPrimary, fontSize: 15),
                     decoration: InputDecoration(
                       hintText: 'Where do you want to go?',
-                      hintStyle: TextStyle(color: AppTheme.textSecondary.withOpacity(0.6)),
+                      hintStyle: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.6)),
                       prefixIcon: const Icon(LucideIcons.search, color: AppTheme.accentAmber, size: 18),
                       suffixIcon: GestureDetector(
                         onTap: () => widget.onSearch(_ctrl.text),
@@ -1001,7 +1002,7 @@ class _SearchSheetState extends State<_SearchSheet> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Text('Popular Searches', style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.7), fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.5)),
+                Text('Popular Searches', style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.7), fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.5)),
                 const SizedBox(height: 12),
                 Wrap(
                   spacing: 10,
@@ -1011,9 +1012,9 @@ class _SearchSheetState extends State<_SearchSheet> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.06),
+                        color: Colors.white.withValues(alpha: 0.06),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.white.withOpacity(0.1)),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -1040,13 +1041,12 @@ class _ExperienceCard extends StatelessWidget {
   final String imageUrl, name, location, rating, price;
 
   const _ExperienceCard({
-    Key? key,
     required this.imageUrl,
     required this.name,
     required this.location,
     required this.rating,
     required this.price,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1065,15 +1065,15 @@ class _ExperienceCard extends StatelessWidget {
         margin: const EdgeInsets.only(right: 14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.38), blurRadius: 22, offset: const Offset(0, 10))],
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.38), blurRadius: 22, offset: const Offset(0, 10))],
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(24),
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Image.network(imageUrl, fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(color: AppTheme.surfaceDark,
+              CachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover,
+                  errorWidget: (_, __, ___) => Container(color: AppTheme.surfaceDark,
                       child: const Icon(LucideIcons.image, color: AppTheme.accentAmber, size: 36))),
               DecoratedBox(
                 decoration: BoxDecoration(
@@ -1081,7 +1081,7 @@ class _ExperienceCard extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     stops: const [0.0, 0.32, 1.0],
-                    colors: [Colors.transparent, Colors.transparent, AppTheme.primaryBlack.withOpacity(0.96)],
+                    colors: [Colors.transparent, Colors.transparent, AppTheme.primaryBlack.withValues(alpha: 0.96)],
                   ),
                 ),
               ),
@@ -1095,9 +1095,9 @@ class _ExperienceCard extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
                       decoration: BoxDecoration(
-                        color: AppTheme.primaryBlack.withOpacity(0.55),
+                        color: AppTheme.primaryBlack.withValues(alpha: 0.55),
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.white.withOpacity(0.1)),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -1120,7 +1120,7 @@ class _ExperienceCard extends StatelessWidget {
                       style: const TextStyle(color: AppTheme.textPrimary, fontSize: 15, fontWeight: FontWeight.w800, height: 1.25, letterSpacing: -0.2)),
                     const SizedBox(height: 7),
                     Row(children: [
-                      Icon(LucideIcons.mapPin, color: AppTheme.accentAmber.withOpacity(0.85), size: 11),
+                      Icon(LucideIcons.mapPin, color: AppTheme.accentAmber.withValues(alpha: 0.85), size: 11),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(location, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 11), overflow: TextOverflow.ellipsis),
@@ -1128,10 +1128,10 @@ class _ExperienceCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                         decoration: BoxDecoration(
-                          color: AppTheme.accentAmber.withOpacity(0.15),
+                          color: AppTheme.accentAmber.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: Text(price, style: TextStyle(color: AppTheme.accentAmber.withOpacity(0.9), fontSize: 11, fontWeight: FontWeight.w700)),
+                        child: Text(price, style: TextStyle(color: AppTheme.accentAmber.withValues(alpha: 0.9), fontSize: 11, fontWeight: FontWeight.w700)),
                       ),
                     ]),
                   ],

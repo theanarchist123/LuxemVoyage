@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/luxem_context_menu.dart';
 import '../../../audio_guide/presentation/screens/audio_guide_player.dart';
 import '../../../../core/services/places_service.dart';
 
@@ -114,7 +116,7 @@ class _TravellerFeedScreenState extends State<TravellerFeedScreen> {
             onTap: () => Navigator.pop(context),
             child: Container(
               padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(color: Colors.white.withOpacity(0.06), shape: BoxShape.circle),
+              decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.06), shape: BoxShape.circle),
               child: const Icon(LucideIcons.arrowLeft, color: AppTheme.textPrimary, size: 18),
             ),
           ),
@@ -123,7 +125,7 @@ class _TravellerFeedScreenState extends State<TravellerFeedScreen> {
           const Spacer(),
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: Colors.white.withOpacity(0.06), shape: BoxShape.circle),
+            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.06), shape: BoxShape.circle),
             child: const Icon(LucideIcons.search, color: AppTheme.textSecondary, size: 18),
           ),
         ],
@@ -136,7 +138,7 @@ class _TravellerFeedScreenState extends State<TravellerFeedScreen> {
       height: 48,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: _filters.length,
         itemBuilder: (ctx, i) {
@@ -186,7 +188,7 @@ class _TravellerFeedScreenState extends State<TravellerFeedScreen> {
         
         return ListView.builder(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
-          physics: const BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           itemCount: items.length,
           itemBuilder: (ctx, i) {
             final item = items[i];
@@ -202,96 +204,114 @@ class _TravellerFeedScreenState extends State<TravellerFeedScreen> {
   }
 
   Widget _buildHeroCard(Map<String, dynamic> item) {
-    return Container(
-      height: 340,
-      margin: const EdgeInsets.only(bottom: 24),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        image: DecorationImage(image: NetworkImage(item['image']), fit: BoxFit.cover),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 20, offset: const Offset(0, 8))],
-      ),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter, end: Alignment.bottomCenter,
-                stops: const [0.4, 1.0],
-                colors: [Colors.transparent, Colors.black.withOpacity(0.9)],
+    return LuxemContextMenu(
+      title: "Story Options",
+      actions: [
+        ContextMenuAction(title: "Add to Favorites", icon: LucideIcons.heart, onTap: () {}),
+        ContextMenuAction(title: "Share Story", icon: LucideIcons.share2, onTap: () {}),
+        ContextMenuAction(title: "View Profile", icon: LucideIcons.user, onTap: () {}),
+        ContextMenuAction(title: "Report", icon: LucideIcons.flag, onTap: () {}, color: Colors.redAccent),
+      ],
+      child: Container(
+        height: 340,
+        margin: const EdgeInsets.only(bottom: 24),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          image: DecorationImage(image: CachedNetworkImageProvider(item['image']), fit: BoxFit.cover),
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 8))],
+        ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter, end: Alignment.bottomCenter,
+                  stops: const [0.4, 1.0],
+                  colors: [Colors.transparent, Colors.black.withValues(alpha: 0.9)],
+                ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 20, left: 20, right: 20,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Icon(LucideIcons.mapPin, color: AppTheme.accentAmber, size: 14),
-                    const SizedBox(width: 6),
-                    Text(item['location'], style: const TextStyle(color: AppTheme.accentAmber, fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1)),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(item['title'], style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w800, letterSpacing: -0.5, height: 1.1)),
-                const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(item['creator'], style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 13)),
-                    _buildPlayButton(item),
-                  ],
-                ),
-              ],
+            Positioned(
+              bottom: 20, left: 20, right: 20,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(LucideIcons.mapPin, color: AppTheme.accentAmber, size: 14),
+                      const SizedBox(width: 6),
+                      Text(item['location'], style: const TextStyle(color: AppTheme.accentAmber, fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1)),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(item['title'], style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w800, letterSpacing: -0.5, height: 1.1)),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(item['creator'], style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 13)),
+                      _buildPlayButton(item),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildStandardCard(Map<String, dynamic> item) {
     // standard horizontal card
-    return Container(
-      height: 120,
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: AppTheme.glassCardDecoration(borderRadius: 20),
-      child: Row(
-        children: [
-          Container(
-            width: 110,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.horizontal(left: Radius.circular(20)),
-              image: DecorationImage(image: NetworkImage(item['image']), fit: BoxFit.cover),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(item['location'], style: const TextStyle(color: AppTheme.accentTeal, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.5)),
-                  const SizedBox(height: 4),
-                  Text(item['title'], maxLines: 2, overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.w700, height: 1.2)),
-                  const Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(item['creator'], style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.7), fontSize: 12)),
-                      _buildPlayButton(item, small: true),
-                    ],
-                  ),
-                ],
+    return LuxemContextMenu(
+      title: "Content Options",
+      actions: [
+        ContextMenuAction(title: "Save for later", icon: LucideIcons.bookmark, onTap: () {}),
+        ContextMenuAction(title: "Share", icon: LucideIcons.share2, onTap: () {}),
+        ContextMenuAction(title: "Show less like this", icon: LucideIcons.eyeOff, onTap: () {}),
+        ContextMenuAction(title: "Report", icon: LucideIcons.flag, onTap: () {}, color: Colors.redAccent),
+      ],
+      child: Container(
+        height: 120,
+        margin: const EdgeInsets.only(bottom: 16),
+        decoration: AppTheme.glassCardDecoration(borderRadius: 20),
+        child: Row(
+          children: [
+            Container(
+              width: 110,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.horizontal(left: Radius.circular(20)),
+                image: DecorationImage(image: CachedNetworkImageProvider(item['image']), fit: BoxFit.cover),
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(item['location'], style: const TextStyle(color: AppTheme.accentTeal, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.5)),
+                    const SizedBox(height: 4),
+                    Text(item['title'], maxLines: 2, overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.w700, height: 1.2)),
+                    const Spacer(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(item['creator'], style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.7), fontSize: 12)),
+                        _buildPlayButton(item, small: true),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -307,9 +327,9 @@ class _TravellerFeedScreenState extends State<TravellerFeedScreen> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: small ? 10 : 16, vertical: small ? 6 : 10),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white.withOpacity(0.2)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

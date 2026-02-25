@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -162,7 +161,7 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
           Text(
             "Drop in a few short fragments. A sight, a taste, a feeling. Our AI writer will weave them into a nostalgic journal entry.",
             style: TextStyle(
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withValues(alpha: 0.6),
               fontSize: 16,
               height: 1.5,
             ),
@@ -187,7 +186,7 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
                 ),
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  backgroundColor: AppTheme.accentTeal.withOpacity(0.1),
+                  backgroundColor: AppTheme.accentTeal.withValues(alpha: 0.1),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
               ).animate().fadeIn(delay: 400.ms),
@@ -206,9 +205,9 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
                 elevation: 0,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               ),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Icon(LucideIcons.feather, size: 20),
                   SizedBox(width: 12),
                   Text(
@@ -235,7 +234,7 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         children: [
-          Icon(LucideIcons.sparkles, color: Colors.white38, size: 18),
+          const Icon(LucideIcons.sparkles, color: Colors.white38, size: 18),
           const SizedBox(width: 12),
           Expanded(
             child: TextField(
@@ -243,7 +242,7 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
               style: const TextStyle(color: Colors.white, fontSize: 16),
               decoration: InputDecoration(
                 hintText: _getHintText(index),
-                hintStyle: TextStyle(color: Colors.white24, fontSize: 16),
+                hintStyle: const TextStyle(color: Colors.white24, fontSize: 16),
                 border: InputBorder.none,
                 isDense: false,
                 contentPadding: const EdgeInsets.symmetric(vertical: 16),
@@ -312,7 +311,7 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha: 0.2),
                   blurRadius: 30,
                   offset: const Offset(0, 15),
                 ),
@@ -347,7 +346,7 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
                 Text(
                   _generatedJournal ?? "",
                   style: GoogleFonts.playfairDisplay(
-                    color: Colors.black.withOpacity(0.85),
+                    color: Colors.black.withValues(alpha: 0.85),
                     fontSize: 18,
                     height: 1.8,
                     fontStyle: FontStyle.italic,

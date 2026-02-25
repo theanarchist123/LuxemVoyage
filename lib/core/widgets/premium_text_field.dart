@@ -20,7 +20,7 @@ class PremiumTextField extends StatelessWidget {
       style: const TextStyle(color: AppTheme.textPrimary),
       decoration: InputDecoration(
         hintText: hintText,
-        prefixIcon: Icon(prefixIcon, color: AppTheme.accentAmber.withOpacity(0.6)),
+        prefixIcon: Icon(prefixIcon, color: AppTheme.accentAmber.withValues(alpha: 0.6)),
       ),
     );
   }

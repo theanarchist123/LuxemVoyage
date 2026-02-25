@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -7,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/gemini_service.dart';
 import '../../../../core/services/firestore_service.dart';
+import '../../../../core/widgets/luxem_context_menu.dart';
 
 class JournalEntryScreen extends StatefulWidget {
   final List<QueryDocumentSnapshot> selectedMemories;
@@ -170,8 +172,8 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> with TickerProv
             itemBuilder: (context, index) {
               final data = widget.selectedMemories[index].data() as Map<String, dynamic>;
               return SizedBox.expand(
-                child: Image.network(data['url'] ?? '', fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(color: AppTheme.surfaceDark))
+                child: CachedNetworkImage(imageUrl: data['url'] ?? '', fit: BoxFit.cover,
+                    errorWidget: (_, __, ___) => Container(color: AppTheme.surfaceDark))
                    .animate(onPlay: (c) => c.repeat())
                    .scale(begin: const Offset(1, 1), end: const Offset(1.1, 1.1), duration: 20.seconds), // Ken burns slow zoom
               );
@@ -184,8 +186,8 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> with TickerProv
               gradient: LinearGradient(
                 begin: Alignment.topCenter, end: Alignment.bottomCenter,
                 colors: [
-                  AppTheme.primaryBlack.withOpacity(0.4),
-                  AppTheme.primaryBlack.withOpacity(0.85),
+                  AppTheme.primaryBlack.withValues(alpha: 0.4),
+                  AppTheme.primaryBlack.withValues(alpha: 0.85),
                   AppTheme.primaryBlack,
                 ],
                 stops: const [0.0, 0.4, 0.9],
@@ -205,7 +207,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> with TickerProv
               onTap: () => Navigator.pop(context),
               child: Container(
                 padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), shape: BoxShape.circle),
+                decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.1), shape: BoxShape.circle),
                 child: const Icon(LucideIcons.x, color: Colors.white, size: 20),
               ),
             ),
@@ -224,7 +226,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> with TickerProv
             width: 80, height: 80,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: AppTheme.accentAmber.withOpacity(0.3), width: 2),
+              border: Border.all(color: AppTheme.accentAmber.withValues(alpha: 0.3), width: 2),
             ),
             child: const Center(child: Icon(LucideIcons.penTool, color: AppTheme.accentAmber, size: 32)),
           ).animate(onPlay: (c) => c.repeat(reverse: true))
@@ -245,7 +247,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> with TickerProv
     final locationName = firstMem['location'] ?? 'A Journey Remembered';
 
     return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       padding: const EdgeInsets.fromLTRB(24, 80, 24, 120),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,19 +285,27 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> with TickerProv
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 itemCount: widget.selectedMemories.length,
                 itemBuilder: (ctx, i) {
                   final mData = widget.selectedMemories[i].data() as Map<String, dynamic>;
-                  return Container(
-                    width: 76,
-                    margin: const EdgeInsets.only(right: 12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.white.withOpacity(0.1)),
-                      image: DecorationImage(
-                        image: NetworkImage(mData['url'] ?? ''),
-                        fit: BoxFit.cover,
+                  return LuxemContextMenu(
+                    title: mData['location'] ?? 'Memory',
+                    actions: [
+                      ContextMenuAction(title: "View Original", icon: LucideIcons.image, onTap: () {}),
+                      ContextMenuAction(title: "Share Memory", icon: LucideIcons.share2, onTap: () {}),
+                      ContextMenuAction(title: "Copy Link", icon: LucideIcons.copy, onTap: () {}),
+                    ],
+                    child: Container(
+                      width: 76,
+                      margin: const EdgeInsets.only(right: 12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                        image: DecorationImage(
+                          image: CachedNetworkImageProvider(mData['url'] ?? ''),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ).animate().fadeIn(delay: Duration(milliseconds: 100 * i)).slideX(begin: 0.1, end: 0);
@@ -312,9 +322,9 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> with TickerProv
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.06),
+                      color: Colors.white.withValues(alpha: 0.06),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withOpacity(0.1)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                     ),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -334,9 +344,9 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> with TickerProv
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(
                         gradient: _isSaving ? null : AppTheme.amberGradient,
-                        color: _isSaving ? Colors.white.withOpacity(0.06) : null,
+                        color: _isSaving ? Colors.white.withValues(alpha: 0.06) : null,
                         borderRadius: BorderRadius.circular(16),
-                        boxShadow: _isSaving ? [] : [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.3), blurRadius: 16, offset: const Offset(0, 5))],
+                        boxShadow: _isSaving ? [] : [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.3), blurRadius: 16, offset: const Offset(0, 5))],
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

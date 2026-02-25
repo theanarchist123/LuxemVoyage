@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'dart:ui';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -42,7 +41,7 @@ class _TravelSwipeMatchScreenState extends State<TravelSwipeMatchScreen> {
   ];
 
   // We will load images dynamically into this list for the top cards
-  List<Map<String, dynamic>> _loadedCards = [];
+  final List<Map<String, dynamic>> _loadedCards = [];
   int _deckIndex = 0;
   bool _isLoadingBatch = false;
 
@@ -180,7 +179,7 @@ class _TravelSwipeMatchScreenState extends State<TravelSwipeMatchScreen> {
             onTap: () => Navigator.pop(context),
             child: Container(
               padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(color: Colors.white.withOpacity(0.06), shape: BoxShape.circle),
+              decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.06), shape: BoxShape.circle),
               child: const Icon(LucideIcons.arrowLeft, color: AppTheme.textPrimary, size: 18),
             ),
           ),
@@ -206,7 +205,7 @@ class _TravelSwipeMatchScreenState extends State<TravelSwipeMatchScreen> {
             borderRadius: BorderRadius.circular(10),
             child: LinearProgressIndicator(
               value: progress,
-              backgroundColor: Colors.white.withOpacity(0.1),
+              backgroundColor: Colors.white.withValues(alpha: 0.1),
               valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.accentAmber),
               minHeight: 6,
             ),
@@ -269,8 +268,8 @@ class _TravelSwipeMatchScreenState extends State<TravelSwipeMatchScreen> {
         decoration: BoxDecoration(
           color: AppTheme.surfaceDark,
           shape: BoxShape.circle,
-          border: Border.all(color: color.withOpacity(0.5), width: 2),
-          boxShadow: [BoxShadow(color: color.withOpacity(0.2), blurRadius: 20, offset: const Offset(0, 8))],
+          border: Border.all(color: color.withValues(alpha: 0.5), width: 2),
+          boxShadow: [BoxShadow(color: color.withValues(alpha: 0.2), blurRadius: 20, offset: const Offset(0, 8))],
         ),
         child: Icon(icon, color: color, size: 32),
       ),
@@ -295,7 +294,7 @@ class _TravelSwipeMatchScreenState extends State<TravelSwipeMatchScreen> {
           Text(
             _matchedVibes.join(" • "),
             textAlign: TextAlign.center,
-            style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.8), fontSize: 13, height: 1.5),
+            style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.8), fontSize: 13, height: 1.5),
           ).animate(onPlay: (c) => c.repeat(reverse: true)).fadeIn(duration: 1.seconds),
         ],
       ),
@@ -357,7 +356,7 @@ class _SwipeableCardState extends State<_SwipeableCard> {
       height: cardHeight,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(32),
-        boxShadow: widget.isTopCard ? [BoxShadow(color: Colors.black.withOpacity(0.4), blurRadius: 20, offset: const Offset(0, 10))] : [],
+        boxShadow: widget.isTopCard ? [BoxShadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 20, offset: const Offset(0, 10))] : [],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(32),
@@ -381,7 +380,7 @@ class _SwipeableCardState extends State<_SwipeableCard> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter, end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Colors.black.withOpacity(0.9)],
+                  colors: [Colors.transparent, Colors.black.withValues(alpha: 0.9)],
                   stops: const [0.4, 1.0],
                 ),
               ),
@@ -396,7 +395,7 @@ class _SwipeableCardState extends State<_SwipeableCard> {
             // Overlay Tint for swiping
             if (_position.dx != 0 && widget.isTopCard)
               Container(
-                color: _position.dx > 0 ? AppTheme.accentTeal.withOpacity(math.min(0.5, _position.dx / 200)) : Colors.redAccent.withOpacity(math.min(0.5, _position.dx.abs() / 200)),
+                color: _position.dx > 0 ? AppTheme.accentTeal.withValues(alpha: math.min(0.5, _position.dx / 200)) : Colors.redAccent.withValues(alpha: math.min(0.5, _position.dx.abs() / 200)),
               ),
           ],
         ),

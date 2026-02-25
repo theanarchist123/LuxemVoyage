@@ -1,10 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/widgets/gold_button.dart';
 import 'itinerary_result_screen.dart';
 
 class BlindTripCountdownScreen extends StatefulWidget {
@@ -81,7 +81,7 @@ class _BlindTripCountdownScreenState extends State<BlindTripCountdownScreen> {
                 _buildHeader(),
                 Expanded(
                   child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                     padding: const EdgeInsets.symmetric(vertical: 40),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -110,8 +110,8 @@ class _BlindTripCountdownScreenState extends State<BlindTripCountdownScreen> {
           shape: BoxShape.circle,
           gradient: RadialGradient(
             colors: [
-              Colors.redAccent.withOpacity(0.15),
-              Colors.deepPurple.withOpacity(0.1),
+              Colors.redAccent.withValues(alpha: 0.15),
+              Colors.deepPurple.withValues(alpha: 0.1),
               Colors.transparent,
             ],
             stops: const [0.2, 0.6, 1.0],
@@ -154,7 +154,7 @@ class _BlindTripCountdownScreenState extends State<BlindTripCountdownScreen> {
           color: Colors.white, fontSize: 64, fontWeight: FontWeight.w900, letterSpacing: -2, fontFeatures: [FontFeature.tabularFigures()]
         )),
         const SizedBox(height: 8),
-        Text("Destination Locked", style: TextStyle(color: AppTheme.accentAmber.withOpacity(0.8), fontSize: 15, fontWeight: FontWeight.w600, letterSpacing: 1)),
+        Text("Destination Locked", style: TextStyle(color: AppTheme.accentAmber.withValues(alpha: 0.8), fontSize: 15, fontWeight: FontWeight.w600, letterSpacing: 1)),
       ],
     ).animate().fadeIn().slideY(begin: 0.1, end: 0);
   }
@@ -168,11 +168,11 @@ class _BlindTripCountdownScreenState extends State<BlindTripCountdownScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            const Row(
               children: [
-                const Icon(LucideIcons.briefcase, color: AppTheme.accentTeal, size: 18),
-                const SizedBox(width: 8),
-                const Text("Packing Intel", style: TextStyle(color: AppTheme.accentTeal, fontSize: 14, fontWeight: FontWeight.w700, letterSpacing: 1)),
+                Icon(LucideIcons.briefcase, color: AppTheme.accentTeal, size: 18),
+                SizedBox(width: 8),
+                Text("Packing Intel", style: TextStyle(color: AppTheme.accentTeal, fontSize: 14, fontWeight: FontWeight.w700, letterSpacing: 1)),
               ]
             ),
             const SizedBox(height: 16),
@@ -181,9 +181,9 @@ class _BlindTripCountdownScreenState extends State<BlindTripCountdownScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("•", style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 18, height: 1.2)),
+                  Text("•", style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 18, height: 1.2)),
                   const SizedBox(width: 12),
-                  Expanded(child: Text(hint, style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 14, height: 1.4))),
+                  Expanded(child: Text(hint, style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 14, height: 1.4))),
                 ],
               ),
             )),
@@ -205,9 +205,9 @@ class _BlindTripCountdownScreenState extends State<BlindTripCountdownScreen> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 18),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.08),
+                color: Colors.white.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withOpacity(0.15)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
               ),
               child: const Center(
                 child: Text("Cheat: Reveal Early", style: TextStyle(color: Colors.white54, fontSize: 13, fontWeight: FontWeight.w600)),

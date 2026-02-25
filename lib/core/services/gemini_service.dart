@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import '../config/env.dart';
 
 class GeminiService {
-  // ⚠️  For production: move this key to a Cloud Function to avoid APK exposure.
-  static const String _apiKey = 'AIzaSyBzEf4ekGc7XVN_f7G00AXrGMEJnh6dOAI';
+  // using the secret key
+  static const String _apiKey = Env.aiMapApiKey;
 
   final GenerativeModel _chatModel = GenerativeModel(
-    model: 'gemini-3-flash-preview',
+    model: 'gemini-2.5-pro',
     apiKey: _apiKey,
     systemInstruction: Content.system(
       'You are an elite luxury travel concierge for LuxeVoyage. '
@@ -16,7 +17,7 @@ class GeminiService {
   );
 
   final GenerativeModel _plannerModel = GenerativeModel(
-    model: 'gemini-3-flash-preview',
+    model: 'gemini-2.5-pro',
     apiKey: _apiKey,
     generationConfig: GenerationConfig(responseMimeType: 'application/json'),
   );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:circle_nav_bar/circle_nav_bar.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -33,39 +34,31 @@ class _MainScaffoldState extends State<MainScaffold> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 0);
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
     super.dispose();
   }
 
   void _onTabTap(int index) {
     setState(() => _currentIndex = index);
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 350),
-      curve: Curves.easeOutCubic,
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.primaryBlack,
-      body: PageView(
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
+      body: IndexedStack(
+        index: _currentIndex,
         children: _screens,
       ),
       floatingActionButton: _buildConciergeOrb(context),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: AppTheme.surfaceDark.withOpacity(0.95),
+          color: AppTheme.surfaceDark.withValues(alpha: 0.95),
           border: Border(
-            top: BorderSide(color: Colors.white.withOpacity(0.04)),
+            top: BorderSide(color: Colors.white.withValues(alpha: 0.04)),
           ),
         ),
         child: CircleNavBar(
@@ -77,19 +70,19 @@ class _MainScaffoldState extends State<MainScaffold> {
             _buildProfileIcon(true),
           ],
           inactiveIcons: [
-            Icon(LucideIcons.home, color: AppTheme.textSecondary.withOpacity(0.5), size: 20),
-            Icon(LucideIcons.map, color: AppTheme.textSecondary.withOpacity(0.5), size: 20),
-            Icon(LucideIcons.compass, color: AppTheme.textSecondary.withOpacity(0.5), size: 20),
-            Icon(LucideIcons.image, color: AppTheme.textSecondary.withOpacity(0.5), size: 20),
+            Icon(LucideIcons.home, color: AppTheme.textSecondary.withValues(alpha: 0.5), size: 20),
+            Icon(LucideIcons.map, color: AppTheme.textSecondary.withValues(alpha: 0.5), size: 20),
+            Icon(LucideIcons.compass, color: AppTheme.textSecondary.withValues(alpha: 0.5), size: 20),
+            Icon(LucideIcons.image, color: AppTheme.textSecondary.withValues(alpha: 0.5), size: 20),
             _buildProfileIcon(false),
           ],
-          color: AppTheme.surfaceDark.withOpacity(0.95),
+          color: AppTheme.surfaceDark.withValues(alpha: 0.95),
           circleColor: AppTheme.accentAmber,
           height: 62,
           circleWidth: 52,
           activeIndex: _currentIndex,
           onTap: _onTabTap,
-          shadowColor: Colors.black.withOpacity(0.3),
+          shadowColor: Colors.black.withValues(alpha: 0.3),
           elevation: 4,
         ),
       ),
@@ -111,14 +104,14 @@ class _MainScaffoldState extends State<MainScaffold> {
         ),
         child: CircleAvatar(
           radius: isActive ? 13 : 11,
-          backgroundImage: NetworkImage(photoUrl),
+          backgroundImage: CachedNetworkImageProvider(photoUrl),
         ),
       );
     }
 
     return Icon(
       LucideIcons.user,
-      color: isActive ? AppTheme.primaryBlack : AppTheme.textSecondary.withOpacity(0.6),
+      color: isActive ? AppTheme.primaryBlack : AppTheme.textSecondary.withValues(alpha: 0.6),
       size: isActive ? 24 : 22,
     );
   }
@@ -133,12 +126,12 @@ class _MainScaffoldState extends State<MainScaffold> {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: LinearGradient(
-          colors: [AppTheme.accentTeal, AppTheme.accentTeal.withOpacity(0.7)],
+          colors: [AppTheme.accentTeal, AppTheme.accentTeal.withValues(alpha: 0.7)],
           begin: Alignment.topLeft, end: Alignment.bottomRight,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.accentTeal.withOpacity(0.4),
+            color: AppTheme.accentTeal.withValues(alpha: 0.4),
             blurRadius: 18, spreadRadius: 2,
             offset: const Offset(0, 4),
           ),
@@ -150,7 +143,7 @@ class _MainScaffoldState extends State<MainScaffold> {
             context,
             PageRouteBuilder(
               transitionDuration: const Duration(milliseconds: 400),
-              pageBuilder: (_, __, ___) => ChatScreen(initialContextMessage: activeTripContext),
+              pageBuilder: (_, __, ___) => const ChatScreen(initialContextMessage: activeTripContext),
               transitionsBuilder: (_, animation, __, child) {
                 return SlideTransition(
                   position: Tween<Offset>(begin: const Offset(0, 0.25), end: Offset.zero).animate(
@@ -165,8 +158,7 @@ class _MainScaffoldState extends State<MainScaffold> {
         elevation: 0,
         child: const Icon(LucideIcons.compass, color: AppTheme.primaryBlack, size: 24),
       ),
-    ).animate(onPlay: (c) => c.repeat(reverse: true))
-     .scale(begin: const Offset(0.95, 0.95), end: const Offset(1.03, 1.03), duration: 2.seconds);
+    );
   }
 }
 

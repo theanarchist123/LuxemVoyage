@@ -9,12 +9,12 @@ class GoldButton extends StatefulWidget {
   final bool isOutline;
 
   const GoldButton({
-    Key? key,
+    super.key,
     required this.text,
     this.onPressed,
     this.icon,
     this.isOutline = false,
-  }) : super(key: key);
+  });
 
   @override
   State<GoldButton> createState() => _GoldButtonState();
@@ -49,13 +49,13 @@ class _GoldButtonState extends State<GoldButton> with SingleTickerProviderStateM
             color: widget.isOutline ? Colors.transparent : null,
             borderRadius: BorderRadius.circular(16),
             border: widget.isOutline
-                ? Border.all(color: AppTheme.accentAmber.withOpacity(0.5), width: 1.5)
+                ? Border.all(color: AppTheme.accentAmber.withValues(alpha: 0.5), width: 1.5)
                 : null,
             boxShadow: widget.isOutline
                 ? null
                 : [
                     BoxShadow(
-                      color: AppTheme.accentAmber.withOpacity(0.3),
+                      color: AppTheme.accentAmber.withValues(alpha: 0.3),
                       blurRadius: 20,
                       offset: const Offset(0, 6),
                     ),

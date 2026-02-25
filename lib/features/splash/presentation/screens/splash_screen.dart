@@ -7,7 +7,7 @@ import '../../../auth/presentation/screens/login_screen.dart';
 import '../../../../../main_scaffold.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -73,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       shape: BoxShape.circle,
                       gradient: RadialGradient(
                         colors: [
-                          AppTheme.accentAmber.withOpacity(0.4),
+                          AppTheme.accentAmber.withValues(alpha: 0.4),
                           Colors.transparent,
                         ],
                         stops: const [0.1, 1.0],
@@ -104,7 +104,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.accentAmber.withOpacity(0.1),
+                          color: AppTheme.accentAmber.withValues(alpha: 0.1),
                           blurRadius: 40,
                           spreadRadius: 10,
                         ),
@@ -140,9 +140,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.05),
+                    color: Colors.white.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: Colors.white.withOpacity(0.1)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                   ),
                   child: Text(
                     "CURATED TRAVEL EXPERIENCES",
@@ -165,8 +165,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               child: SizedBox(
                 width: 120,
                 child: LinearProgressIndicator(
-                  backgroundColor: Colors.white.withOpacity(0.1),
-                  color: AppTheme.accentAmber.withOpacity(0.5),
+                  backgroundColor: Colors.white.withValues(alpha: 0.1),
+                  color: AppTheme.accentAmber.withValues(alpha: 0.5),
                   minHeight: 2,
                 ),
               ).animate().fadeIn(delay: 2000.ms, duration: 1000.ms),

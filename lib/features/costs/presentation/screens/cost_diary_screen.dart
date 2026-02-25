@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -103,7 +104,7 @@ class _CostDiaryScreenState extends State<CostDiaryScreen> with SingleTickerProv
                       child: IgnorePointer(
                         ignoring: _isAddingExpense,
                         child: SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
+                          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                           padding: const EdgeInsets.only(bottom: 120),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +161,7 @@ class _CostDiaryScreenState extends State<CostDiaryScreen> with SingleTickerProv
             },
             child: Container(
               padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(color: Colors.white.withOpacity(0.06), shape: BoxShape.circle),
+              decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.06), shape: BoxShape.circle),
               child: Icon(LucideIcons.arrowLeft, color: _isAddingExpense ? AppTheme.accentAmber : AppTheme.textPrimary, size: 18),
             ),
           ),
@@ -200,7 +201,7 @@ class _CostDiaryScreenState extends State<CostDiaryScreen> with SingleTickerProv
                   const SizedBox(height: 4),
                   Text('\$${_totalSpent.toStringAsFixed(0)}', style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.w900, letterSpacing: -1)),
                   const SizedBox(height: 4),
-                  Text('of \$${_budget.toStringAsFixed(0)} limit', style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.6), fontSize: 12)),
+                  Text('of \$${_budget.toStringAsFixed(0)} limit', style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.6), fontSize: 12)),
                 ],
               ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.2, end: 0),
             ],
@@ -227,7 +228,7 @@ class _CostDiaryScreenState extends State<CostDiaryScreen> with SingleTickerProv
                 children: [
                   Container(
                     width: 44, height: 44,
-                    decoration: BoxDecoration(color: cat.color.withOpacity(0.15), borderRadius: BorderRadius.circular(12)),
+                    decoration: BoxDecoration(color: cat.color.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(12)),
                     child: Icon(cat.icon, color: cat.color, size: 20),
                   ),
                   const SizedBox(width: 16),
@@ -246,7 +247,7 @@ class _CostDiaryScreenState extends State<CostDiaryScreen> with SingleTickerProv
                         ClipRRect(
                           borderRadius: BorderRadius.circular(4),
                           child: Container(
-                            height: 6, width: double.infinity, color: Colors.white.withOpacity(0.05),
+                            height: 6, width: double.infinity, color: Colors.white.withValues(alpha: 0.05),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: TweenAnimationBuilder<double>(
@@ -281,9 +282,9 @@ class _CostDiaryScreenState extends State<CostDiaryScreen> with SingleTickerProv
       margin: const EdgeInsets.symmetric(horizontal: 24),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isGood ? AppTheme.accentTeal.withOpacity(0.1) : Colors.redAccent.withOpacity(0.1),
+        color: isGood ? AppTheme.accentTeal.withValues(alpha: 0.1) : Colors.redAccent.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isGood ? AppTheme.accentTeal.withOpacity(0.2) : Colors.redAccent.withOpacity(0.2)),
+        border: Border.all(color: isGood ? AppTheme.accentTeal.withValues(alpha: 0.2) : Colors.redAccent.withValues(alpha: 0.2)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -299,7 +300,7 @@ class _CostDiaryScreenState extends State<CostDiaryScreen> with SingleTickerProv
                 Text(
                   isGood ? "You have \$${remaining.toStringAsFixed(0)} left for the rest of your trip. That fancy dinner is definitely in the budget!"
                          : "You've spent 80% of your budget. Consider local street food instead of fine dining tonight.",
-                  style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.9), fontSize: 13, height: 1.4),
+                  style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.9), fontSize: 13, height: 1.4),
                 ),
               ],
             ),
@@ -334,12 +335,12 @@ class _CostDiaryScreenState extends State<CostDiaryScreen> with SingleTickerProv
             height: 90,
             padding: const EdgeInsets.symmetric(vertical: 12),
             decoration: BoxDecoration(
-              color: AppTheme.surfaceDark.withOpacity(0.5),
-              border: Border(top: BorderSide(color: Colors.white.withOpacity(0.05)), bottom: BorderSide(color: Colors.white.withOpacity(0.05))),
+              color: AppTheme.surfaceDark.withValues(alpha: 0.5),
+              border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05)), bottom: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
             ),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
               padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: _categories.length,
               itemBuilder: (ctx, i) {
@@ -352,9 +353,9 @@ class _CostDiaryScreenState extends State<CostDiaryScreen> with SingleTickerProv
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
-                      color: isSelected ? cat.color.withOpacity(0.2) : Colors.transparent,
+                      color: isSelected ? cat.color.withValues(alpha: 0.2) : Colors.transparent,
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: isSelected ? cat.color : Colors.white.withOpacity(0.1)),
+                      border: Border.all(color: isSelected ? cat.color : Colors.white.withValues(alpha: 0.1)),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -390,7 +391,7 @@ class _CostDiaryScreenState extends State<CostDiaryScreen> with SingleTickerProv
                       decoration: BoxDecoration(
                         gradient: AppTheme.amberGradient,
                         borderRadius: BorderRadius.circular(16),
-                        boxShadow: [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.3), blurRadius: 16, offset: const Offset(0, 4))],
+                        boxShadow: [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.3), blurRadius: 16, offset: const Offset(0, 4))],
                       ),
                       child: const Center(child: Text('Save Expense', style: TextStyle(color: AppTheme.primaryBlack, fontSize: 16, fontWeight: FontWeight.w800))),
                     ),

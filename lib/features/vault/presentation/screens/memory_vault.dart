@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -59,9 +60,9 @@ class _MemoryVaultState extends State<MemoryVault> {
                   style: const TextStyle(color: AppTheme.textPrimary),
                   decoration: InputDecoration(
                     hintText: "Caption (e.g. Sunset in Santorini)",
-                    hintStyle: TextStyle(color: AppTheme.textSecondary.withOpacity(0.4)),
+                    hintStyle: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.4)),
                     filled: true,
-                    fillColor: AppTheme.surfaceLight.withOpacity(0.5),
+                    fillColor: AppTheme.surfaceLight.withValues(alpha: 0.5),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
                     focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: AppTheme.accentAmber)),
                   ),
@@ -72,10 +73,10 @@ class _MemoryVaultState extends State<MemoryVault> {
                   style: const TextStyle(color: AppTheme.textPrimary),
                   decoration: InputDecoration(
                     hintText: "Location",
-                    hintStyle: TextStyle(color: AppTheme.textSecondary.withOpacity(0.4)),
+                    hintStyle: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.4)),
                     filled: true,
-                    fillColor: AppTheme.surfaceLight.withOpacity(0.5),
-                    prefixIcon: Icon(LucideIcons.mapPin, color: AppTheme.accentAmber.withOpacity(0.6), size: 18),
+                    fillColor: AppTheme.surfaceLight.withValues(alpha: 0.5),
+                    prefixIcon: Icon(LucideIcons.mapPin, color: AppTheme.accentAmber.withValues(alpha: 0.6), size: 18),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
                     focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: AppTheme.accentAmber)),
                   ),
@@ -208,7 +209,7 @@ class _MemoryVaultState extends State<MemoryVault> {
               children: [
                 const Text("Memory Vault", style: TextStyle(color: AppTheme.textPrimary, fontSize: 26, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
                 const SizedBox(height: 4),
-                Text("Your precious travel moments", style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.7), fontSize: 13)),
+                Text("Your precious travel moments", style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.7), fontSize: 13)),
               ],
             ),
           ),
@@ -222,9 +223,9 @@ class _MemoryVaultState extends State<MemoryVault> {
               margin: const EdgeInsets.only(right: 12),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
-                color: AppTheme.accentViolet.withOpacity(0.15),
+                color: AppTheme.accentViolet.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppTheme.accentViolet.withOpacity(0.3)),
+                border: Border.all(color: AppTheme.accentViolet.withValues(alpha: 0.3)),
               ),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
@@ -246,7 +247,7 @@ class _MemoryVaultState extends State<MemoryVault> {
                 gradient: _isUploading ? null : AppTheme.amberGradient,
                 color: _isUploading ? AppTheme.surfaceLight : null,
                 borderRadius: BorderRadius.circular(14),
-                boxShadow: _isUploading ? null : [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.3), blurRadius: 12)],
+                boxShadow: _isUploading ? null : [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.3), blurRadius: 12)],
               ),
               child: _isUploading
                   ? const Center(child: SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.primaryBlack)))
@@ -301,16 +302,16 @@ class _MemoryVaultState extends State<MemoryVault> {
           Container(
             width: 80, height: 80,
             decoration: BoxDecoration(
-              color: AppTheme.accentAmber.withOpacity(0.08),
+              color: AppTheme.accentAmber.withValues(alpha: 0.08),
               shape: BoxShape.circle,
             ),
-            child: Icon(_selectedTab == 0 ? LucideIcons.camera : LucideIcons.book, color: AppTheme.accentAmber.withOpacity(0.5), size: 36),
+            child: Icon(_selectedTab == 0 ? LucideIcons.camera : LucideIcons.book, color: AppTheme.accentAmber.withValues(alpha: 0.5), size: 36),
           ),
           const SizedBox(height: 20),
           Text(_selectedTab == 0 ? "No memories yet" : "No journals yet", style: const TextStyle(color: AppTheme.textPrimary, fontSize: 18, fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
           Text(_selectedTab == 0 ? "Tap + to capture your first travel moment" : "Create one from your memories",
-              style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.6), fontSize: 14)),
+              style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.6), fontSize: 14)),
         ],
       ).animate().fadeIn(duration: 600.ms),
     );
@@ -319,7 +320,7 @@ class _MemoryVaultState extends State<MemoryVault> {
   Widget _buildMemoriesGrid(List<QueryDocumentSnapshot> docs) {
     return GridView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      physics: const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12, childAspectRatio: 0.72,
       ),
@@ -336,7 +337,7 @@ class _MemoryVaultState extends State<MemoryVault> {
   Widget _buildJournalsList(List<QueryDocumentSnapshot> docs) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      physics: const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       itemCount: docs.length,
       itemBuilder: (ctx, i) {
         final data = docs[i].data() as Map<String, dynamic>;
@@ -356,7 +357,7 @@ class _MemoryVaultState extends State<MemoryVault> {
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                   child: AspectRatio(
                     aspectRatio: 16 / 9,
-                    child: Image.network(coverImage, fit: BoxFit.cover),
+                    child: CachedNetworkImage(imageUrl: coverImage, fit: BoxFit.cover),
                   ),
                 ),
               Padding(
@@ -368,7 +369,7 @@ class _MemoryVaultState extends State<MemoryVault> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(title, style: const TextStyle(color: AppTheme.textPrimary, fontSize: 18, fontWeight: FontWeight.w800)),
-                        Text('${date.day}/${date.month}/${date.year}', style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.6), fontSize: 12)),
+                        Text('${date.day}/${date.month}/${date.year}', style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.6), fontSize: 12)),
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -390,7 +391,7 @@ class _MemoryVaultState extends State<MemoryVault> {
 class _MemoryCard extends StatelessWidget {
   final String url, caption, location;
 
-  const _MemoryCard({super.key, required this.url, required this.caption, required this.location});
+  const _MemoryCard({required this.url, required this.caption, required this.location});
 
   @override
   Widget build(BuildContext context) {
@@ -399,8 +400,8 @@ class _MemoryCard extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(url, fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
+          CachedNetworkImage(imageUrl: url, fit: BoxFit.cover,
+              errorWidget: (_, __, ___) => Container(
                   color: AppTheme.surfaceDark,
                   child: const Icon(LucideIcons.image, color: AppTheme.accentAmber, size: 28))),
           DecoratedBox(
@@ -408,7 +409,7 @@ class _MemoryCard extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter, end: Alignment.bottomCenter,
                 stops: const [0.35, 1.0],
-                colors: [Colors.transparent, AppTheme.primaryBlack.withOpacity(0.85)],
+                colors: [Colors.transparent, AppTheme.primaryBlack.withValues(alpha: 0.85)],
               ),
             ),
           ),

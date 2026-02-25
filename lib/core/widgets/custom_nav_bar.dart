@@ -9,10 +9,10 @@ class CustomNavBar extends StatelessWidget {
   final Function(int) onTap;
 
   const CustomNavBar({
-    Key? key,
+    super.key,
     required this.currentIndex,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +28,11 @@ class CustomNavBar extends StatelessWidget {
             Icon(LucideIcons.user, color: AppTheme.primaryBlack),
           ],
           inactiveIcons: [
-            Icon(LucideIcons.home, color: AppTheme.textSecondary.withOpacity(0.6)),
-            Icon(LucideIcons.map, color: AppTheme.textSecondary.withOpacity(0.6)),
-            Icon(LucideIcons.bookOpen, color: AppTheme.textSecondary.withOpacity(0.6)),
-            Icon(LucideIcons.image, color: AppTheme.textSecondary.withOpacity(0.6)),
-            Icon(LucideIcons.user, color: AppTheme.textSecondary.withOpacity(0.6)),
+            Icon(LucideIcons.home, color: AppTheme.textSecondary.withValues(alpha: 0.6)),
+            Icon(LucideIcons.map, color: AppTheme.textSecondary.withValues(alpha: 0.6)),
+            Icon(LucideIcons.bookOpen, color: AppTheme.textSecondary.withValues(alpha: 0.6)),
+            Icon(LucideIcons.image, color: AppTheme.textSecondary.withValues(alpha: 0.6)),
+            Icon(LucideIcons.user, color: AppTheme.textSecondary.withValues(alpha: 0.6)),
           ],
           color: AppTheme.surfaceDark,
           circleColor: AppTheme.accentAmber,
@@ -43,7 +43,7 @@ class CustomNavBar extends StatelessWidget {
             HapticFeedback.lightImpact();
             onTap(index);
           },
-          shadowColor: Colors.black.withOpacity(0.3),
+          shadowColor: Colors.black.withValues(alpha: 0.3),
           elevation: 8,
         ),
       ),

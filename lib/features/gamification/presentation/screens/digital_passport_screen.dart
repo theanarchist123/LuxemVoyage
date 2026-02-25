@@ -38,10 +38,10 @@ class _DigitalPassportScreenState extends State<DigitalPassportScreen> with Sing
     });
 
     // Fill the progress over 2 seconds
-    final int totalTicks = 100;
-    final int tickDuration = 2000 ~/ totalTicks; // 20ms per tick
+    const int totalTicks = 100;
+    const int tickDuration = 2000 ~/ totalTicks; // 20ms per tick
     
-    _pressTimer = Timer.periodic(Duration(milliseconds: tickDuration), (timer) {
+    _pressTimer = Timer.periodic(const Duration(milliseconds: tickDuration), (timer) {
       if (!mounted) return;
       setState(() {
         _pressProgress += (1.0 / totalTicks);
@@ -114,7 +114,7 @@ class _DigitalPassportScreenState extends State<DigitalPassportScreen> with Sing
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.05),
+              color: Colors.white.withValues(alpha: 0.05),
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white12),
             ),
@@ -143,8 +143,8 @@ class _DigitalPassportScreenState extends State<DigitalPassportScreen> with Sing
       margin: const EdgeInsets.symmetric(horizontal: 24),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.accentTeal.withOpacity(0.1),
-        border: Border.all(color: AppTheme.accentTeal.withOpacity(0.3)),
+        color: AppTheme.accentTeal.withValues(alpha: 0.1),
+        border: Border.all(color: AppTheme.accentTeal.withValues(alpha: 0.3)),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -189,9 +189,9 @@ class _DigitalPassportScreenState extends State<DigitalPassportScreen> with Sing
           color: const Color(0xFFF4F1EA), // High-quality passport paper
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 40, offset: const Offset(0, 20)),
+            BoxShadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 40, offset: const Offset(0, 20)),
             // Inner shadow to look like paper thickness
-            BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 4, spreadRadius: -2, offset: const Offset(-2, 0)),
+            BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 4, spreadRadius: -2, offset: const Offset(-2, 0)),
           ],
         ),
         child: Stack(
@@ -221,7 +221,7 @@ class _DigitalPassportScreenState extends State<DigitalPassportScreen> with Sing
                       Text(
                         "VISAS",
                         style: GoogleFonts.inter(
-                          color: Colors.blue[900]!.withOpacity(0.3),
+                          color: Colors.blue[900]!.withValues(alpha: 0.3),
                           fontSize: 16,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 4,
@@ -230,7 +230,7 @@ class _DigitalPassportScreenState extends State<DigitalPassportScreen> with Sing
                       Text(
                         "PAGE 12",
                         style: GoogleFonts.inter(
-                          color: Colors.blue[900]!.withOpacity(0.3),
+                          color: Colors.blue[900]!.withValues(alpha: 0.3),
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 2,
@@ -266,7 +266,7 @@ class _DigitalPassportScreenState extends State<DigitalPassportScreen> with Sing
       height: 220,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.red[800]!.withOpacity(0.85), width: 6),
+        border: Border.all(color: Colors.red[800]!.withValues(alpha: 0.85), width: 6),
       ),
       child: Stack(
         alignment: Alignment.center,
@@ -277,7 +277,7 @@ class _DigitalPassportScreenState extends State<DigitalPassportScreen> with Sing
             height: 190,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.red[800]!.withOpacity(0.85), width: 2),
+              border: Border.all(color: Colors.red[800]!.withValues(alpha: 0.85), width: 2),
             ),
           ),
           Column(
@@ -286,19 +286,19 @@ class _DigitalPassportScreenState extends State<DigitalPassportScreen> with Sing
               Text(
                 "ARRIVED",
                 style: GoogleFonts.oswald(
-                  color: Colors.red[800]!.withOpacity(0.9),
+                  color: Colors.red[800]!.withValues(alpha: 0.9),
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 6,
                 ),
               ),
               const SizedBox(height: 8),
-              Icon(LucideIcons.planeLanding, color: Colors.red[800]!.withOpacity(0.9), size: 32),
+              Icon(LucideIcons.planeLanding, color: Colors.red[800]!.withValues(alpha: 0.9), size: 32),
               const SizedBox(height: 8),
               Text(
                 _currentLocation.toUpperCase(),
                 style: GoogleFonts.inter(
-                  color: Colors.red[800]!.withOpacity(0.9),
+                  color: Colors.red[800]!.withValues(alpha: 0.9),
                   fontSize: 18,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 2,
@@ -308,7 +308,7 @@ class _DigitalPassportScreenState extends State<DigitalPassportScreen> with Sing
               Text(
                 _arrivalDate.toUpperCase(),
                 style: GoogleFonts.courierPrime(
-                  color: Colors.red[800]!.withOpacity(0.8),
+                  color: Colors.red[800]!.withValues(alpha: 0.8),
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
@@ -351,8 +351,8 @@ class _DigitalPassportScreenState extends State<DigitalPassportScreen> with Sing
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: _isStamped 
-                  ? AppTheme.accentTeal.withOpacity(0.2) 
-                  : (_isPressing ? AppTheme.accentAmber.withOpacity(0.2) : Colors.white.withOpacity(0.05)),
+                  ? AppTheme.accentTeal.withValues(alpha: 0.2) 
+                  : (_isPressing ? AppTheme.accentAmber.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.05)),
               border: Border.all(
                 color: _isStamped 
                     ? AppTheme.accentTeal 
@@ -360,7 +360,7 @@ class _DigitalPassportScreenState extends State<DigitalPassportScreen> with Sing
                 width: 2,
               ),
               boxShadow: _isPressing && !_isStamped ? [
-                BoxShadow(color: AppTheme.accentAmber.withOpacity(0.4), blurRadius: 20, spreadRadius: 5)
+                BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.4), blurRadius: 20, spreadRadius: 5)
               ] : [],
             ),
             child: Stack(
@@ -394,7 +394,7 @@ class _PaperTexturePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.blue[900]!.withOpacity(0.02)
+      ..color = Colors.blue[900]!.withValues(alpha: 0.02)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
 

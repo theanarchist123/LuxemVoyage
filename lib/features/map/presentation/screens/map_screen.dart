@@ -221,10 +221,10 @@ class _MapScreenState extends State<MapScreen> {
   Widget _buildSearchBar() {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.surfaceDark.withOpacity(0.95),
+        color: AppTheme.surfaceDark.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white.withOpacity(0.06)),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 20, offset: const Offset(0, 4))],
+        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 4))],
       ),
       child: Row(
         children: [
@@ -241,7 +241,7 @@ class _MapScreenState extends State<MapScreen> {
               onSubmitted: _searchPlaces,
               decoration: InputDecoration(
                 hintText: "Search destinations, hotels...",
-                hintStyle: TextStyle(color: AppTheme.textSecondary.withOpacity(0.4), fontSize: 14),
+                hintStyle: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.4), fontSize: 14),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
               ),
@@ -269,17 +269,17 @@ class _MapScreenState extends State<MapScreen> {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceDark.withOpacity(0.95),
+        color: AppTheme.surfaceDark.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: AppTheme.accentAmber.withOpacity(0.15)),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.35), blurRadius: 24, offset: const Offset(0, 8))],
+        border: Border.all(color: AppTheme.accentAmber.withValues(alpha: 0.15)),
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.35), blurRadius: 24, offset: const Offset(0, 8))],
       ),
       child: Row(
         children: [
           Container(
             width: 52, height: 52,
             decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [AppTheme.accentAmber.withOpacity(0.15), AppTheme.accentTeal.withOpacity(0.08)]),
+              gradient: LinearGradient(colors: [AppTheme.accentAmber.withValues(alpha: 0.15), AppTheme.accentTeal.withValues(alpha: 0.08)]),
               borderRadius: BorderRadius.circular(16),
             ),
             child: const Icon(LucideIcons.mapPin, color: AppTheme.accentAmber, size: 24),
@@ -310,7 +310,7 @@ class _MapScreenState extends State<MapScreen> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.05),
+                color: Colors.white.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Icon(LucideIcons.x, color: AppTheme.textSecondary, size: 16),
@@ -327,10 +327,10 @@ class _MapScreenState extends State<MapScreen> {
       child: Container(
         width: 44, height: 44,
         decoration: BoxDecoration(
-          color: AppTheme.surfaceDark.withOpacity(0.9),
+          color: AppTheme.surfaceDark.withValues(alpha: 0.9),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withOpacity(0.06)),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.25), blurRadius: 10)],
+          border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.25), blurRadius: 10)],
         ),
         child: Icon(icon, color: AppTheme.accentAmber, size: 18),
       ),

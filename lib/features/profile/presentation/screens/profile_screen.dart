@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -23,7 +24,7 @@ class ProfileScreen extends StatelessWidget {
       child: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           child: Column(
             children: [
               const SizedBox(height: 16),
@@ -34,10 +35,10 @@ class ProfileScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(28),
                   gradient: LinearGradient(
-                    colors: [AppTheme.accentAmber.withOpacity(0.1), AppTheme.accentViolet.withOpacity(0.06)],
+                    colors: [AppTheme.accentAmber.withValues(alpha: 0.1), AppTheme.accentViolet.withValues(alpha: 0.06)],
                     begin: Alignment.topLeft, end: Alignment.bottomRight,
                   ),
-                  border: Border.all(color: AppTheme.accentAmber.withOpacity(0.12)),
+                  border: Border.all(color: AppTheme.accentAmber.withValues(alpha: 0.12)),
                 ),
                 child: Column(
                   children: [
@@ -52,7 +53,7 @@ class ProfileScreen extends StatelessWidget {
                           child: CircleAvatar(
                             radius: 46,
                             backgroundColor: AppTheme.surfaceDark,
-                            backgroundImage: photoUrl != null && photoUrl.isNotEmpty ? NetworkImage(photoUrl) : null,
+                            backgroundImage: photoUrl != null && photoUrl.isNotEmpty ? CachedNetworkImageProvider(photoUrl) : null,
                             child: photoUrl == null || photoUrl.isEmpty
                                 ? const Icon(LucideIcons.user, size: 36, color: AppTheme.accentAmber)
                                 : null,
@@ -143,14 +144,14 @@ class ProfileScreen extends StatelessWidget {
     ]);
   }
 
-  Widget _divider() => Container(height: 36, width: 1, color: Colors.white.withOpacity(0.06));
+  Widget _divider() => Container(height: 36, width: 1, color: Colors.white.withValues(alpha: 0.06));
 
   Widget _section(String title) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 0, 24, 10),
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Text(title, style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.5), fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 1.5)),
+        child: Text(title, style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.5), fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 1.5)),
       ),
     );
   }
@@ -161,21 +162,21 @@ class ProfileScreen extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceDark.withOpacity(0.5),
+        color: AppTheme.surfaceDark.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.04)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
       ),
       child: ListTile(
         leading: Container(
           width: 36, height: 36,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(icon, color: color, size: 18),
         ),
         title: Text(label, style: TextStyle(color: isDestructive ? Colors.redAccent : AppTheme.textPrimary, fontSize: 15, fontWeight: FontWeight.w500)),
-        trailing: Icon(LucideIcons.chevronRight, color: AppTheme.textSecondary.withOpacity(0.3), size: 16),
+        trailing: Icon(LucideIcons.chevronRight, color: AppTheme.textSecondary.withValues(alpha: 0.3), size: 16),
         onTap: onTap ?? () {},
       ),
     );

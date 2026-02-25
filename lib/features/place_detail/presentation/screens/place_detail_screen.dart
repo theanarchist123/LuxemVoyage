@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/luxem_context_menu.dart';
 import '../../../audio_guide/presentation/screens/audio_guide_player.dart';
 
 class PlaceDetailScreen extends StatelessWidget {
@@ -10,14 +12,13 @@ class PlaceDetailScreen extends StatelessWidget {
   final String location;
   final String imageUrl;
   final String rating;
-
   const PlaceDetailScreen({
-    Key? key,
+    super.key,
     this.name = 'Louvre Private Tour',
     this.location = 'Paris, France',
     this.imageUrl = 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=2920&auto=format&fit=crop',
     this.rating = '4.9',
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class PlaceDetailScreen extends StatelessWidget {
       body: Stack(
         children: [
           CustomScrollView(
-            physics: const BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             slivers: [
               SliverAppBar(
                 expandedHeight: 380,
@@ -40,9 +41,9 @@ class PlaceDetailScreen extends StatelessWidget {
                   child: Container(
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppTheme.primaryBlack.withOpacity(0.5),
+                      color: AppTheme.primaryBlack.withValues(alpha: 0.5),
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white.withOpacity(0.08)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
                     ),
                     child: const Icon(LucideIcons.arrowLeft, color: AppTheme.textPrimary, size: 20),
                   ),
@@ -51,9 +52,9 @@ class PlaceDetailScreen extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppTheme.primaryBlack.withOpacity(0.5),
+                      color: AppTheme.primaryBlack.withValues(alpha: 0.5),
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white.withOpacity(0.08)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
                     ),
                     child: IconButton(
                       icon: const Icon(LucideIcons.bookmark, color: AppTheme.accentAmber, size: 20),
@@ -65,15 +66,23 @@ class PlaceDetailScreen extends StatelessWidget {
                   background: Stack(
                     fit: StackFit.expand,
                     children: [
-                      Image.network(imageUrl, fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => Container(
-                              color: AppTheme.surfaceDark,
-                              child: const Icon(LucideIcons.image, color: AppTheme.accentAmber, size: 60))),
-                      DecoratedBox(
+                      LuxemContextMenu(
+                        title: "Image Options",
+                        actions: [
+                          ContextMenuAction(title: "Save to Vault", icon: LucideIcons.archive, onTap: () {}),
+                          ContextMenuAction(title: "Share Place", icon: LucideIcons.share2, onTap: () {}),
+                          ContextMenuAction(title: "Download HD", icon: LucideIcons.download, onTap: () {}),
+                        ],
+                        child: CachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover,
+                            errorWidget: (_, __, ___) => Container(
+                                color: AppTheme.surfaceDark,
+                                child: const Icon(LucideIcons.image, color: AppTheme.accentAmber, size: 60))),
+                      ),
+                      const DecoratedBox(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter, end: Alignment.bottomCenter,
-                            stops: const [0.0, 0.5, 1.0],
+                            stops: [0.0, 0.5, 1.0],
                             colors: [Colors.transparent, Colors.transparent, AppTheme.primaryBlack],
                           ),
                         ),
@@ -101,7 +110,7 @@ class PlaceDetailScreen extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                             decoration: BoxDecoration(
-                              color: AppTheme.accentAmber.withOpacity(0.15),
+                              color: AppTheme.accentAmber.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Row(children: [
@@ -151,7 +160,7 @@ class PlaceDetailScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter, end: Alignment.bottomCenter,
-                  colors: [AppTheme.primaryBlack.withOpacity(0), AppTheme.primaryBlack],
+                  colors: [AppTheme.primaryBlack.withValues(alpha: 0), AppTheme.primaryBlack],
                 ),
               ),
               child: SizedBox(
@@ -160,7 +169,7 @@ class PlaceDetailScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: AppTheme.amberGradient,
                     borderRadius: BorderRadius.circular(16),
-                    boxShadow: [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.3), blurRadius: 16, offset: const Offset(0, 6))],
+                    boxShadow: [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.3), blurRadius: 16, offset: const Offset(0, 6))],
                   ),
                   child: ElevatedButton.icon(
                     onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AudioGuidePlayer(placeName: name))),
@@ -197,25 +206,33 @@ class PlaceDetailScreen extends StatelessWidget {
   }
 
   Widget _review(String reviewer, String comment, String stars) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: AppTheme.glassCardDecoration(borderRadius: 16, withShadow: false),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text(reviewer, style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w700)),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-            decoration: BoxDecoration(color: AppTheme.accentAmber.withOpacity(0.15), borderRadius: BorderRadius.circular(8)),
-            child: Row(children: [
-              const Icon(Icons.star_rounded, color: AppTheme.accentAmber, size: 13),
-              const SizedBox(width: 3),
-              Text(stars, style: const TextStyle(color: AppTheme.accentAmber, fontSize: 12, fontWeight: FontWeight.w700)),
-            ]),
-          ),
+    return LuxemContextMenu(
+      title: "Review from $reviewer",
+      actions: [
+        ContextMenuAction(title: "Upvote Review", icon: LucideIcons.thumbsUp, onTap: () {}),
+        ContextMenuAction(title: "Translate", icon: LucideIcons.languages, onTap: () {}),
+        ContextMenuAction(title: "Report", icon: LucideIcons.flag, onTap: () {}, color: Colors.redAccent),
+      ],
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: AppTheme.glassCardDecoration(borderRadius: 16, withShadow: false),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(reviewer, style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w700)),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(color: AppTheme.accentAmber.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(8)),
+              child: Row(children: [
+                const Icon(Icons.star_rounded, color: AppTheme.accentAmber, size: 13),
+                const SizedBox(width: 3),
+                Text(stars, style: const TextStyle(color: AppTheme.accentAmber, fontSize: 12, fontWeight: FontWeight.w700)),
+              ]),
+            ),
+          ]),
+          const SizedBox(height: 8),
+          Text(comment, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13, height: 1.5)),
         ]),
-        const SizedBox(height: 8),
-        Text(comment, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13, height: 1.5)),
-      ]),
+      ),
     );
   }
 }

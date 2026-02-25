@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -63,7 +63,7 @@ class _MoodBoardScreenState extends State<MoodBoardScreen> {
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.06),
+                color: Colors.white.withValues(alpha: 0.06),
                 shape: BoxShape.circle,
               ),
               child: const Icon(LucideIcons.arrowLeft, color: AppTheme.textPrimary, size: 18),
@@ -93,7 +93,7 @@ class _MoodBoardScreenState extends State<MoodBoardScreen> {
               style: TextStyle(color: AppTheme.textPrimary, fontSize: 26, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
           const SizedBox(height: 4),
           Text('Choose 3–5 aesthetics that speak to your soul',
-              style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.7), fontSize: 13)),
+              style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.7), fontSize: 13)),
         ],
       ),
     ).animate().fadeIn(delay: 100.ms);
@@ -102,7 +102,7 @@ class _MoodBoardScreenState extends State<MoodBoardScreen> {
   Widget _buildGrid() {
     return GridView.builder(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-      physics: const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 10,
@@ -136,7 +136,7 @@ class _MoodBoardScreenState extends State<MoodBoardScreen> {
             width: 2.5,
           ),
           boxShadow: isSelected
-              ? [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.3), blurRadius: 12)]
+              ? [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.3), blurRadius: 12)]
               : [],
         ),
         child: ClipRRect(
@@ -144,18 +144,18 @@ class _MoodBoardScreenState extends State<MoodBoardScreen> {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Image.network(mood['img'] as String, fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(color: mood['color'] as Color)),
+              CachedNetworkImage(imageUrl: mood['img'] as String, fit: BoxFit.cover,
+                  errorWidget: (_, __, ___) => Container(color: mood['color'] as Color)),
               Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter, end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, (mood['color'] as Color).withOpacity(0.85)],
+                    colors: [Colors.transparent, (mood['color'] as Color).withValues(alpha: 0.85)],
                   ),
                 ),
               ),
               if (isSelected)
-                Container(color: AppTheme.accentAmber.withOpacity(0.15)),
+                Container(color: AppTheme.accentAmber.withValues(alpha: 0.15)),
               Positioned(
                 top: 8, right: 8,
                 child: AnimatedOpacity(
@@ -218,10 +218,10 @@ class _MoodBoardScreenState extends State<MoodBoardScreen> {
               padding: const EdgeInsets.symmetric(vertical: 17),
               decoration: BoxDecoration(
                 gradient: enough ? AppTheme.amberGradient : null,
-                color: enough ? null : Colors.white.withOpacity(0.05),
+                color: enough ? null : Colors.white.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: enough
-                    ? [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.35), blurRadius: 18, offset: const Offset(0, 5))]
+                    ? [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.35), blurRadius: 18, offset: const Offset(0, 5))]
                     : null,
               ),
               child: Center(
@@ -325,14 +325,14 @@ class _DestinationRevealScreenState extends State<_DestinationRevealScreen>
           AnimatedOpacity(
             duration: const Duration(milliseconds: 800),
             opacity: _showDestination ? 1 : 0,
-            child: Image.network(imageUrl, fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(color: AppTheme.surfaceDark)),
+            child: CachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover,
+                errorWidget: (_, __, ___) => Container(color: AppTheme.surfaceDark)),
           ),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter, end: Alignment.bottomCenter,
-                colors: [Colors.black.withOpacity(0.3), AppTheme.primaryBlack.withOpacity(0.95)],
+                colors: [Colors.black.withValues(alpha: 0.3), AppTheme.primaryBlack.withValues(alpha: 0.95)],
                 stops: const [0.0, 0.75],
               ),
             ),
@@ -349,10 +349,10 @@ class _DestinationRevealScreenState extends State<_DestinationRevealScreen>
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: SweepGradient(colors: [
-                      AppTheme.accentTeal.withOpacity(0.7),
-                      AppTheme.accentViolet.withOpacity(0.7),
-                      AppTheme.accentAmber.withOpacity(0.7),
-                      AppTheme.accentTeal.withOpacity(0.7),
+                      AppTheme.accentTeal.withValues(alpha: 0.7),
+                      AppTheme.accentViolet.withValues(alpha: 0.7),
+                      AppTheme.accentAmber.withValues(alpha: 0.7),
+                      AppTheme.accentTeal.withValues(alpha: 0.7),
                     ]),
                   ),
                 ),
@@ -364,7 +364,7 @@ class _DestinationRevealScreenState extends State<_DestinationRevealScreen>
               duration: const Duration(milliseconds: 600),
               opacity: _showDestination ? 1 : 0,
               child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
                 child: Column(
                   children: [
@@ -374,9 +374,9 @@ class _DestinationRevealScreenState extends State<_DestinationRevealScreen>
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.white.withOpacity(0.2)),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
                       ),
                       child: const Text('✨ Your Perfect Match',
                           style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
@@ -396,7 +396,7 @@ class _DestinationRevealScreenState extends State<_DestinationRevealScreen>
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 36),
                       child: Text(tagline, textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white.withOpacity(0.75), fontSize: 16, fontStyle: FontStyle.italic, height: 1.5)),
+                          style: TextStyle(color: Colors.white.withValues(alpha: 0.75), fontSize: 16, fontStyle: FontStyle.italic, height: 1.5)),
                     ).animate(delay: 500.ms).fadeIn(),
 
                     const SizedBox(height: 40),
@@ -433,9 +433,9 @@ class _DestinationRevealScreenState extends State<_DestinationRevealScreen>
                           children: highlights.map((h) => Container(
                             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                             decoration: BoxDecoration(
-                              color: AppTheme.accentViolet.withOpacity(0.1),
+                              color: AppTheme.accentViolet.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AppTheme.accentViolet.withOpacity(0.2)),
+                              border: Border.all(color: AppTheme.accentViolet.withValues(alpha: 0.2)),
                             ),
                             child: Text(h, style: const TextStyle(color: AppTheme.accentViolet, fontSize: 13, fontWeight: FontWeight.w600)),
                           )).toList(),
@@ -469,7 +469,7 @@ class _DestinationRevealScreenState extends State<_DestinationRevealScreen>
                           decoration: BoxDecoration(
                             gradient: AppTheme.amberGradient,
                             borderRadius: BorderRadius.circular(16),
-                            boxShadow: [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.35), blurRadius: 16, offset: const Offset(0, 5))],
+                            boxShadow: [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.35), blurRadius: 16, offset: const Offset(0, 5))],
                           ),
                           child: const Center(child: Text('Plan This Trip →',
                               style: TextStyle(color: AppTheme.primaryBlack, fontSize: 15, fontWeight: FontWeight.w700))),

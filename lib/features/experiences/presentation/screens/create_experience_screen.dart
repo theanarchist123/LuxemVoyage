@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -161,7 +162,7 @@ class _CreateExperienceScreenState extends State<CreateExperienceScreen> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: AppTheme.auroraGradient,
-              boxShadow: [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.3), blurRadius: 40)],
+              boxShadow: [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.3), blurRadius: 40)],
             ),
             child: const Center(child: Icon(LucideIcons.sparkles, color: Colors.white, size: 36)),
           ).animate(onPlay: (c) => c.repeat(reverse: true))
@@ -180,7 +181,7 @@ class _CreateExperienceScreenState extends State<CreateExperienceScreen> {
                     width: 8, height: 8,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: isDone ? AppTheme.accentTeal : isActive ? AppTheme.accentAmber : Colors.white.withOpacity(0.15),
+                      color: isDone ? AppTheme.accentTeal : isActive ? AppTheme.accentAmber : Colors.white.withValues(alpha: 0.15),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -211,9 +212,9 @@ class _CreateExperienceScreenState extends State<CreateExperienceScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.06),
+                    color: Colors.white.withValues(alpha: 0.06),
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white.withOpacity(0.08)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
                   ),
                   child: Icon(_currentStep > 0 ? LucideIcons.arrowLeft : LucideIcons.x,
                       color: AppTheme.textPrimary, size: 18),
@@ -232,7 +233,7 @@ class _CreateExperienceScreenState extends State<CreateExperienceScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.06),
+                  color: Colors.white.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text('${_currentStep + 1} / 4',
@@ -254,7 +255,7 @@ class _CreateExperienceScreenState extends State<CreateExperienceScreen> {
               height: 8,
               decoration: BoxDecoration(
                 gradient: i == _currentStep ? AppTheme.amberGradient : null,
-                color: i == _currentStep ? null : (i < _currentStep ? AppTheme.accentTeal : Colors.white.withOpacity(0.12)),
+                color: i == _currentStep ? null : (i < _currentStep ? AppTheme.accentTeal : Colors.white.withValues(alpha: 0.12)),
                 borderRadius: BorderRadius.circular(4),
               ),
             )),
@@ -287,7 +288,7 @@ class _CreateExperienceScreenState extends State<CreateExperienceScreen> {
               style: const TextStyle(color: AppTheme.textPrimary, fontSize: 18, fontWeight: FontWeight.w600),
               decoration: InputDecoration(
                 hintText: 'My Eiffel Tower Spot...',
-                hintStyle: TextStyle(color: AppTheme.textSecondary.withOpacity(0.5), fontSize: 16),
+                hintStyle: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.5), fontSize: 16),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.all(20),
               ),
@@ -319,7 +320,7 @@ class _CreateExperienceScreenState extends State<CreateExperienceScreen> {
               expands: true,
               decoration: InputDecoration(
                 hintText: 'We watched the sun set from right here, and everything changed...',
-                hintStyle: TextStyle(color: AppTheme.textSecondary.withOpacity(0.4), fontSize: 13, fontStyle: FontStyle.italic),
+                hintStyle: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.4), fontSize: 13, fontStyle: FontStyle.italic),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.all(20),
               ),
@@ -355,15 +356,15 @@ class _CreateExperienceScreenState extends State<CreateExperienceScreen> {
               height: 180,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.04),
+                color: Colors.white.withValues(alpha: 0.04),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppTheme.accentAmber.withOpacity(0.2), style: BorderStyle.solid),
+                border: Border.all(color: AppTheme.accentAmber.withValues(alpha: 0.2), style: BorderStyle.solid),
               ),
               child: _selectedPhotoPath != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.network(_selectedPhotoPath!, fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => _photoPlaceholder()),
+                      child: CachedNetworkImage(imageUrl: _selectedPhotoPath!, fit: BoxFit.cover,
+                          errorWidget: (_, __, ___) => _photoPlaceholder()),
                     )
                   : _photoPlaceholder(),
             ),
@@ -377,9 +378,9 @@ class _CreateExperienceScreenState extends State<CreateExperienceScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 17, horizontal: 16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.06),
+                  color: Colors.white.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withOpacity(0.08)),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
                 ),
                 child: const Text('Skip', style: TextStyle(color: AppTheme.textSecondary, fontSize: 14)),
               ),
@@ -399,7 +400,7 @@ class _CreateExperienceScreenState extends State<CreateExperienceScreen> {
         Container(
           width: 56, height: 56,
           decoration: BoxDecoration(
-            color: AppTheme.accentAmber.withOpacity(0.08),
+            color: AppTheme.accentAmber.withValues(alpha: 0.08),
             shape: BoxShape.circle,
           ),
           child: const Icon(LucideIcons.camera, color: AppTheme.accentAmber, size: 24),
@@ -417,7 +418,7 @@ class _CreateExperienceScreenState extends State<CreateExperienceScreen> {
     required Widget child,
   }) {
     return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       padding: const EdgeInsets.fromLTRB(24, 8, 24, 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -425,9 +426,9 @@ class _CreateExperienceScreenState extends State<CreateExperienceScreen> {
           Container(
             width: 48, height: 48,
             decoration: BoxDecoration(
-              color: AppTheme.accentAmber.withOpacity(0.1),
+              color: AppTheme.accentAmber.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppTheme.accentAmber.withOpacity(0.2)),
+              border: Border.all(color: AppTheme.accentAmber.withValues(alpha: 0.2)),
             ),
             child: Icon(icon, color: AppTheme.accentAmber, size: 22),
           ),
@@ -452,10 +453,10 @@ class _CreateExperienceScreenState extends State<CreateExperienceScreen> {
         padding: const EdgeInsets.symmetric(vertical: 17),
         decoration: BoxDecoration(
           gradient: enabled ? AppTheme.amberGradient : null,
-          color: enabled ? null : Colors.white.withOpacity(0.04),
+          color: enabled ? null : Colors.white.withValues(alpha: 0.04),
           borderRadius: BorderRadius.circular(16),
           boxShadow: enabled
-              ? [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.3), blurRadius: 16, offset: const Offset(0, 5))]
+              ? [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.3), blurRadius: 16, offset: const Offset(0, 5))]
               : null,
         ),
         child: Center(

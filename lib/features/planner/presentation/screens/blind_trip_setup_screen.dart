@@ -1,8 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/widgets/gold_button.dart';
 import '../../../../core/services/gemini_service.dart';
 import 'blind_trip_countdown_screen.dart';
 
@@ -77,7 +77,7 @@ class _BlindTripSetupScreenState extends State<BlindTripSetupScreen> {
         _buildHeader(),
         Expanded(
           child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +110,7 @@ class _BlindTripSetupScreenState extends State<BlindTripSetupScreen> {
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.06),
+                color: Colors.white.withValues(alpha: 0.06),
                 shape: BoxShape.circle,
               ),
               child: const Icon(LucideIcons.arrowLeft, color: AppTheme.textPrimary, size: 18),
@@ -137,7 +137,7 @@ class _BlindTripSetupScreenState extends State<BlindTripSetupScreen> {
         const SizedBox(height: 12),
         Text(
           "Set your limits. Pick a vibe. We book it. You won't know where you're going until 24 hours before your flight.",
-          style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.8), fontSize: 15, height: 1.5),
+          style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.8), fontSize: 15, height: 1.5),
         ).animate().fadeIn(delay: 300.ms),
       ],
     );
@@ -158,7 +158,7 @@ class _BlindTripSetupScreenState extends State<BlindTripSetupScreen> {
         SliderTheme(
           data: SliderThemeData(
             activeTrackColor: AppTheme.accentAmber,
-            inactiveTrackColor: Colors.white.withOpacity(0.1),
+            inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
             thumbColor: AppTheme.accentAmber,
             trackHeight: 6,
           ),
@@ -189,7 +189,7 @@ class _BlindTripSetupScreenState extends State<BlindTripSetupScreen> {
         SliderTheme(
           data: SliderThemeData(
             activeTrackColor: AppTheme.accentTeal,
-            inactiveTrackColor: Colors.white.withOpacity(0.1),
+            inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
             thumbColor: AppTheme.accentTeal,
             trackHeight: 6,
           ),
@@ -222,7 +222,7 @@ class _BlindTripSetupScreenState extends State<BlindTripSetupScreen> {
                 duration: const Duration(milliseconds: 200),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppTheme.accentViolet.withOpacity(0.15) : Colors.white.withOpacity(0.05),
+                  color: isSelected ? AppTheme.accentViolet.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: isSelected ? AppTheme.accentViolet : Colors.transparent),
                 ),
@@ -257,9 +257,9 @@ class _BlindTripSetupScreenState extends State<BlindTripSetupScreen> {
           padding: const EdgeInsets.symmetric(vertical: 18),
           decoration: BoxDecoration(
             gradient: canProceed ? const LinearGradient(colors: [Colors.redAccent, Colors.deepOrange]) : null,
-            color: canProceed ? null : Colors.white.withOpacity(0.05),
+            color: canProceed ? null : Colors.white.withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(16),
-            boxShadow: canProceed ? [BoxShadow(color: Colors.redAccent.withOpacity(0.4), blurRadius: 20, offset: const Offset(0, 5))] : null,
+            boxShadow: canProceed ? [BoxShadow(color: Colors.redAccent.withValues(alpha: 0.4), blurRadius: 20, offset: const Offset(0, 5))] : null,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -276,14 +276,14 @@ class _BlindTripSetupScreenState extends State<BlindTripSetupScreen> {
 
   Widget _buildGeneratingOverlay() {
     return Container(
-      color: Colors.black.withOpacity(0.9),
+      color: Colors.black.withValues(alpha: 0.9),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const CircularProgressIndicator(color: Colors.redAccent),
             const SizedBox(height: 24),
-            Text("Encrypting Destination...", style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 16, fontStyle: FontStyle.italic)),
+            Text("Encrypting Destination...", style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 16, fontStyle: FontStyle.italic)),
           ],
         ),
       ),

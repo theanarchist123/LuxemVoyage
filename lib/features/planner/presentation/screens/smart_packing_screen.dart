@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -102,14 +103,14 @@ class _SmartPackingScreenState extends State<SmartPackingScreen> {
                 onTap: () => Navigator.pop(context),
                 child: Container(
                   padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(color: Colors.white.withOpacity(0.06), shape: BoxShape.circle),
+                  decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.06), shape: BoxShape.circle),
                   child: const Icon(LucideIcons.arrowLeft, color: AppTheme.textPrimary, size: 18),
                 ),
               ),
               const Expanded(child: SizedBox()),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(color: AppTheme.accentTeal.withOpacity(0.15), borderRadius: BorderRadius.circular(20)),
+                decoration: BoxDecoration(color: AppTheme.accentTeal.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(20)),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -124,7 +125,7 @@ class _SmartPackingScreenState extends State<SmartPackingScreen> {
           const SizedBox(height: 24),
           const Text('Smart Pack', style: TextStyle(color: AppTheme.textPrimary, fontSize: 26, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
           const SizedBox(height: 4),
-          Text('Tailored for ${widget.destination}', style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.7), fontSize: 14)),
+          Text('Tailored for ${widget.destination}', style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.7), fontSize: 14)),
         ],
       ),
     ).animate().fadeIn(duration: 400.ms);
@@ -147,7 +148,7 @@ class _SmartPackingScreenState extends State<SmartPackingScreen> {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Container(
-              height: 8, width: double.infinity, color: Colors.white.withOpacity(0.05),
+              height: 8, width: double.infinity, color: Colors.white.withValues(alpha: 0.05),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: AnimatedContainer(
@@ -155,7 +156,7 @@ class _SmartPackingScreenState extends State<SmartPackingScreen> {
                   curve: Curves.easeOutCubic,
                   width: MediaQuery.of(context).size.width * _progress,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [AppTheme.accentTeal, AppTheme.accentTeal.withOpacity(0.6)]),
+                    gradient: LinearGradient(colors: [AppTheme.accentTeal, AppTheme.accentTeal.withValues(alpha: 0.6)]),
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
@@ -178,7 +179,7 @@ class _SmartPackingScreenState extends State<SmartPackingScreen> {
 
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(20, 32, 20, 40),
-      physics: const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       itemCount: keys.length,
       itemBuilder: (ctx, i) {
         final dayKey = keys[i];
@@ -198,9 +199,9 @@ class _SmartPackingScreenState extends State<SmartPackingScreen> {
           child: Container(
             margin: const EdgeInsets.only(bottom: 16),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.03),
+              color: Colors.white.withValues(alpha: 0.03),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white.withOpacity(0.05)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
             child: ExpansionTile(
               initiallyExpanded: i == 0,
@@ -221,7 +222,7 @@ class _SmartPackingScreenState extends State<SmartPackingScreen> {
                         onTap: () => _toggleItem(dayKey, itemIndex),
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.white.withOpacity(0.05)))),
+                          decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05)))),
                           child: Row(
                             children: [
                               AnimatedContainer(
@@ -229,7 +230,7 @@ class _SmartPackingScreenState extends State<SmartPackingScreen> {
                                 width: 22, height: 22,
                                 decoration: BoxDecoration(
                                   color: isPacked ? AppTheme.accentTeal : Colors.transparent,
-                                  border: Border.all(color: isPacked ? AppTheme.accentTeal : AppTheme.textSecondary.withOpacity(0.5), width: 1.5),
+                                  border: Border.all(color: isPacked ? AppTheme.accentTeal : AppTheme.textSecondary.withValues(alpha: 0.5), width: 1.5),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: isPacked ? const Icon(LucideIcons.check, color: AppTheme.primaryBlack, size: 14) : null,
@@ -239,10 +240,10 @@ class _SmartPackingScreenState extends State<SmartPackingScreen> {
                                 child: AnimatedDefaultTextStyle(
                                   duration: const Duration(milliseconds: 250),
                                   style: TextStyle(
-                                    color: isPacked ? AppTheme.textSecondary.withOpacity(0.4) : AppTheme.textPrimary,
+                                    color: isPacked ? AppTheme.textSecondary.withValues(alpha: 0.4) : AppTheme.textPrimary,
                                     fontSize: 14,
                                     decoration: isPacked ? TextDecoration.lineThrough : TextDecoration.none,
-                                    decorationColor: AppTheme.textSecondary.withOpacity(0.4),
+                                    decorationColor: AppTheme.textSecondary.withValues(alpha: 0.4),
                                     decorationThickness: 2,
                                   ),
                                   child: Text(itemName),

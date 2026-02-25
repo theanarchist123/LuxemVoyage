@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -206,10 +207,10 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
         fit: StackFit.expand,
         children: [
           // Background image
-          Image.network(
+          CachedNetworkImage(imageUrl: 
             'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=2920&auto=format&fit=crop',
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Container(color: AppTheme.surfaceDark),
+            errorWidget: (_, __, ___) => Container(color: AppTheme.surfaceDark),
           ),
           Container(
             decoration: BoxDecoration(
@@ -217,8 +218,8 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  AppTheme.primaryBlack.withOpacity(0.65),
-                  AppTheme.primaryBlack.withOpacity(0.92),
+                  AppTheme.primaryBlack.withValues(alpha: 0.65),
+                  AppTheme.primaryBlack.withValues(alpha: 0.92),
                   AppTheme.primaryBlack,
                 ],
                 stops: const [0.0, 0.5, 1.0],
@@ -257,9 +258,9 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.08),
+                color: Colors.white.withValues(alpha: 0.08),
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white.withOpacity(0.06)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
               ),
               child: const Icon(LucideIcons.chevronDown, color: AppTheme.textPrimary),
             ),
@@ -278,9 +279,9 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.08),
+                color: Colors.white.withValues(alpha: 0.08),
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white.withOpacity(0.06)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
               ),
               child: const Icon(LucideIcons.refreshCw, color: AppTheme.textSecondary, size: 18),
             ),
@@ -297,9 +298,9 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
         Container(
           width: 80, height: 80,
           decoration: BoxDecoration(
-            color: AppTheme.accentAmber.withOpacity(0.1),
+            color: AppTheme.accentAmber.withValues(alpha: 0.1),
             shape: BoxShape.circle,
-            border: Border.all(color: AppTheme.accentAmber.withOpacity(0.3)),
+            border: Border.all(color: AppTheme.accentAmber.withValues(alpha: 0.3)),
           ),
           child: const Center(child: CircularProgressIndicator(color: AppTheme.accentAmber, strokeWidth: 2)),
         ),
@@ -320,7 +321,7 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(LucideIcons.alertCircle, color: Colors.redAccent.withOpacity(0.7), size: 48),
+        Icon(LucideIcons.alertCircle, color: Colors.redAccent.withValues(alpha: 0.7), size: 48),
         const SizedBox(height: 16),
         Text(_scriptError!, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 14), textAlign: TextAlign.center),
         const SizedBox(height: 24),
@@ -338,7 +339,7 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
 
   Widget _buildPlayerContent() {
     return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       child: Column(
         children: [
           const SizedBox(height: 12),
@@ -401,7 +402,7 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
                 width: 3,
                 height: animH,
                 decoration: BoxDecoration(
-                  color: isActive ? AppTheme.accentAmber : Colors.white.withOpacity(0.15),
+                  color: isActive ? AppTheme.accentAmber : Colors.white.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(2),
                 ),
               );
@@ -419,7 +420,7 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
       decoration: AppTheme.glassCardDecoration(borderRadius: 22),
       constraints: const BoxConstraints(maxHeight: 200),
       child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         child: Text(
           _script ?? '',
           style: const TextStyle(
@@ -442,11 +443,11 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
           SliderTheme(
             data: SliderThemeData(
               activeTrackColor: AppTheme.accentAmber,
-              inactiveTrackColor: Colors.white.withOpacity(0.1),
+              inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
               thumbColor: AppTheme.accentAmber,
               trackHeight: 4,
               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
-              overlayColor: AppTheme.accentAmber.withOpacity(0.15),
+              overlayColor: AppTheme.accentAmber.withValues(alpha: 0.15),
             ),
             child: Slider(value: _progress, onChanged: (_) {}),
           ),
@@ -483,7 +484,7 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.08),
+                    color: Colors.white.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -499,7 +500,7 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
                 child: Container(
                   width: 44, height: 44,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.06),
+                    color: Colors.white.withValues(alpha: 0.06),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(LucideIcons.skipBack, color: AppTheme.textPrimary, size: 20),
@@ -514,7 +515,7 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
                   decoration: BoxDecoration(
                     gradient: AppTheme.amberGradient,
                     shape: BoxShape.circle,
-                    boxShadow: [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.4), blurRadius: 24, offset: const Offset(0, 6))],
+                    boxShadow: [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.4), blurRadius: 24, offset: const Offset(0, 6))],
                   ),
                   child: Icon(
                     _isPlaying ? LucideIcons.pause : (_isPaused ? LucideIcons.play : LucideIcons.play),
@@ -529,7 +530,7 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
                 child: Container(
                   width: 44, height: 44,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.06),
+                    color: Colors.white.withValues(alpha: 0.06),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(LucideIcons.square, color: AppTheme.textPrimary, size: 18),
@@ -545,9 +546,9 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: _pitch > 1.0 ? AppTheme.accentAmber.withOpacity(0.15) : Colors.white.withOpacity(0.08),
+                    color: _pitch > 1.0 ? AppTheme.accentAmber.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(8),
-                    border: _pitch > 1.0 ? Border.all(color: AppTheme.accentAmber.withOpacity(0.3)) : null,
+                    border: _pitch > 1.0 ? Border.all(color: AppTheme.accentAmber.withValues(alpha: 0.3)) : null,
                   ),
                   child: Icon(LucideIcons.mic, color: _pitch > 1.0 ? AppTheme.accentAmber : AppTheme.textSecondary, size: 18),
                 ),
@@ -560,7 +561,7 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: (_isPlaying ? AppTheme.accentTeal : _isPaused ? AppTheme.accentAmber : Colors.white).withOpacity(0.08),
+              color: (_isPlaying ? AppTheme.accentTeal : _isPaused ? AppTheme.accentAmber : Colors.white).withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -569,7 +570,7 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
                 Container(
                   width: 6, height: 6,
                   decoration: BoxDecoration(
-                    color: _isPlaying ? AppTheme.accentTeal : _isPaused ? AppTheme.accentAmber : Colors.white.withOpacity(0.3),
+                    color: _isPlaying ? AppTheme.accentTeal : _isPaused ? AppTheme.accentAmber : Colors.white.withValues(alpha: 0.3),
                     shape: BoxShape.circle,
                   ),
                 ),

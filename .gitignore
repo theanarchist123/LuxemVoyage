@@ -33,6 +33,10 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# API keys and secrets (preventing leaks)
+/lib/core/config/env.dart
+/ios/Flutter/Secret.xcconfig
+
 # Symbolication related
 app.*.symbols
 

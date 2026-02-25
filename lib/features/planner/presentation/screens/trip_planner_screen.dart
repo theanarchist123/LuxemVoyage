@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -140,9 +141,9 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppTheme.accentAmber.withOpacity(0.1),
+              color: AppTheme.accentAmber.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppTheme.accentAmber.withOpacity(0.2)),
+              border: Border.all(color: AppTheme.accentAmber.withValues(alpha: 0.2)),
             ),
             child: const Icon(LucideIcons.sparkles, color: AppTheme.accentAmber, size: 20),
           ),
@@ -167,7 +168,7 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
                   gradient: _step > half
                       ? AppTheme.amberGradient
                       : null,
-                  color: _step > half ? null : Colors.white.withOpacity(0.08),
+                  color: _step > half ? null : Colors.white.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(1),
                 ),
               ),
@@ -187,7 +188,7 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
                     shape: BoxShape.circle,
                     gradient: isActive || isDone ? AppTheme.amberGradient : null,
                     color: isActive || isDone ? null : AppTheme.surfaceLight,
-                    border: isActive ? null : Border.all(color: Colors.white.withOpacity(0.08)),
+                    border: isActive ? null : Border.all(color: Colors.white.withValues(alpha: 0.08)),
                   ),
                   child: Center(
                     child: isDone
@@ -199,7 +200,7 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
                 ),
                 const SizedBox(height: 6),
                 Text(labels[idx], style: TextStyle(
-                  color: isActive ? AppTheme.accentAmber : AppTheme.textSecondary.withOpacity(0.6),
+                  color: isActive ? AppTheme.accentAmber : AppTheme.textSecondary.withValues(alpha: 0.6),
                   fontSize: 10, fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
                 )),
               ],
@@ -222,7 +223,7 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
   Widget _buildDestinationStep() {
     return GridView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      physics: const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12, childAspectRatio: 0.85,
       ),
@@ -240,21 +241,21 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
                 color: selected ? AppTheme.accentAmber : Colors.transparent,
                 width: selected ? 2 : 0,
               ),
-              boxShadow: selected ? [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.2), blurRadius: 16)] : null,
+              boxShadow: selected ? [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.2), blurRadius: 16)] : null,
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network(d['image']!, fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(color: AppTheme.surfaceDark)),
+                  CachedNetworkImage(imageUrl: d['image']!, fit: BoxFit.cover,
+                      errorWidget: (_, __, ___) => Container(color: AppTheme.surfaceDark)),
                   DecoratedBox(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter, end: Alignment.bottomCenter,
                         stops: const [0.3, 1.0],
-                        colors: [Colors.transparent, AppTheme.primaryBlack.withOpacity(0.9)],
+                        colors: [Colors.transparent, AppTheme.primaryBlack.withValues(alpha: 0.9)],
                       ),
                     ),
                   ),
@@ -301,14 +302,14 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
               .animate().fadeIn().scale(begin: const Offset(0.8, 0.8)),
           const Text("days", style: TextStyle(color: AppTheme.accentAmber, fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: 3)),
           const SizedBox(height: 8),
-          Text("Select trip duration", style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.6), fontSize: 14)),
+          Text("Select trip duration", style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.6), fontSize: 14)),
           const SizedBox(height: 48),
           SliderTheme(
             data: SliderThemeData(
               activeTrackColor: AppTheme.accentAmber,
               inactiveTrackColor: AppTheme.surfaceLight,
               thumbColor: AppTheme.accentAmber,
-              overlayColor: AppTheme.accentAmber.withOpacity(0.1),
+              overlayColor: AppTheme.accentAmber.withValues(alpha: 0.1),
               trackHeight: 6,
               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
             ),
@@ -320,8 +321,8 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("2 days", style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.4), fontSize: 12)),
-                Text("14 days", style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.4), fontSize: 12)),
+                Text("2 days", style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.4), fontSize: 12)),
+                Text("14 days", style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.4), fontSize: 12)),
               ],
             ),
           ),
@@ -333,14 +334,14 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
   Widget _buildTierStep() {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      physics: const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       itemCount: _tiers.length,
       itemBuilder: (ctx, i) {
         final selected = _selectedTier == i;
         final colors = [
-          [AppTheme.accentTeal, AppTheme.accentTeal.withOpacity(0.1)],
-          [AppTheme.accentAmber, AppTheme.accentAmber.withOpacity(0.1)],
-          [AppTheme.accentViolet, AppTheme.accentViolet.withOpacity(0.1)],
+          [AppTheme.accentTeal, AppTheme.accentTeal.withValues(alpha: 0.1)],
+          [AppTheme.accentAmber, AppTheme.accentAmber.withValues(alpha: 0.1)],
+          [AppTheme.accentViolet, AppTheme.accentViolet.withValues(alpha: 0.1)],
         ];
         return GestureDetector(
           onTap: () => setState(() => _selectedTier = i),
@@ -352,10 +353,10 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
               color: selected ? colors[i][1] : AppTheme.surfaceDark,
               borderRadius: BorderRadius.circular(22),
               border: Border.all(
-                color: selected ? colors[i][0] : Colors.white.withOpacity(0.06),
+                color: selected ? colors[i][0] : Colors.white.withValues(alpha: 0.06),
                 width: selected ? 2 : 1,
               ),
-              boxShadow: selected ? [BoxShadow(color: colors[i][0].withOpacity(0.15), blurRadius: 16)] : null,
+              boxShadow: selected ? [BoxShadow(color: colors[i][0].withValues(alpha: 0.15), blurRadius: 16)] : null,
             ),
             child: Row(
               children: [

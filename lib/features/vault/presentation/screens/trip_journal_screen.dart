@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -5,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/firestore_service.dart';
+import '../../../../core/widgets/luxem_context_menu.dart';
 import 'journal_entry_screen.dart';
 
 class TripJournalScreen extends StatefulWidget {
@@ -99,7 +101,7 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
                 onTap: () => Navigator.pop(context),
                 child: Container(
                   padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(color: Colors.white.withOpacity(0.06), shape: BoxShape.circle),
+                  decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.06), shape: BoxShape.circle),
                   child: const Icon(LucideIcons.arrowLeft, color: AppTheme.textPrimary, size: 18),
                 ),
               ),
@@ -119,7 +121,7 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
           const SizedBox(height: 4),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Text('Select up to $_maxPhotos memories to weave into a story', style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.7), fontSize: 14)),
+            child: Text('Select up to $_maxPhotos memories to weave into a story', style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.7), fontSize: 14)),
           ),
         ],
       ),
@@ -131,7 +133,7 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(LucideIcons.imageOff, color: AppTheme.textSecondary.withOpacity(0.3), size: 48),
+          Icon(LucideIcons.imageOff, color: AppTheme.textSecondary.withValues(alpha: 0.3), size: 48),
           const SizedBox(height: 16),
           const Text("No memories to draw from", style: TextStyle(color: AppTheme.textSecondary)),
         ],
@@ -142,7 +144,7 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
   Widget _buildFilmStrip(List<QueryDocumentSnapshot> docs) {
     return GridView.builder(
       padding: const EdgeInsets.all(24),
-      physics: const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 16,
@@ -156,59 +158,68 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
         final isSelected = _selectedMemories.contains(doc);
         final selectionIndex = _selectedMemories.indexOf(doc) + 1;
 
-        return GestureDetector(
-          onTap: () => _toggleSelection(doc),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeOutCubic,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: isSelected ? AppTheme.accentAmber : Colors.transparent,
-                width: 3,
+        return LuxemContextMenu(
+          title: "Memory Options",
+          actions: [
+            ContextMenuAction(title: isSelected ? "Deselect" : "Select", icon: isSelected ? LucideIcons.minusCircle : LucideIcons.plusCircle, onTap: () => _toggleSelection(doc)),
+            ContextMenuAction(title: "View High Res", icon: LucideIcons.maximize2, onTap: () {}),
+            ContextMenuAction(title: "Share Memory", icon: LucideIcons.share2, onTap: () {}),
+            ContextMenuAction(title: "Delete", icon: LucideIcons.trash2, onTap: () {}, color: Colors.redAccent),
+          ],
+          child: GestureDetector(
+            onTap: () => _toggleSelection(doc),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOutCubic,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected ? AppTheme.accentAmber : Colors.transparent,
+                  width: 3,
+                ),
+                boxShadow: isSelected
+                    ? [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.3), blurRadius: 16, spreadRadius: 2)]
+                    : [],
               ),
-              boxShadow: isSelected
-                  ? [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.3), blurRadius: 16, spreadRadius: 2)]
-                  : [],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(13), // 16 - 3 border
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.network(data['url'] ?? '', fit: BoxFit.cover),
-                  if (isSelected) Container(color: AppTheme.primaryBlack.withOpacity(0.2)),
-                  
-                  // Label / Caption gradient
-                  Positioned(
-                    bottom: 0, left: 0, right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(12, 30, 12, 12),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter, end: Alignment.bottomCenter,
-                          colors: [Colors.transparent, Colors.black.withOpacity(0.8)],
-                        ),
-                      ),
-                      child: Text(data['location'] ?? 'Unknown location', 
-                        style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
-                        maxLines: 1, overflow: TextOverflow.ellipsis),
-                    ),
-                  ),
-
-                  // Selection Badge
-                  if (isSelected)
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(13), // 16 - 3 border
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    CachedNetworkImage(imageUrl: data['url'] ?? '', fit: BoxFit.cover),
+                    if (isSelected) Container(color: AppTheme.primaryBlack.withValues(alpha: 0.2)),
+                    
+                    // Label / Caption gradient
                     Positioned(
-                      top: 8, right: 8,
+                      bottom: 0, left: 0, right: 0,
                       child: Container(
-                        width: 26, height: 26,
-                        decoration: const BoxDecoration(shape: BoxShape.circle, gradient: AppTheme.amberGradient),
-                        child: Center(
-                          child: Text('$selectionIndex', style: const TextStyle(color: AppTheme.primaryBlack, fontSize: 13, fontWeight: FontWeight.w800)),
+                        padding: const EdgeInsets.fromLTRB(12, 30, 12, 12),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter, end: Alignment.bottomCenter,
+                            colors: [Colors.transparent, Colors.black.withValues(alpha: 0.8)],
+                          ),
                         ),
-                      ).animate().scale(duration: 250.ms, curve: Curves.easeOutBack),
+                        child: Text(data['location'] ?? 'Unknown location', 
+                          style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
+                          maxLines: 1, overflow: TextOverflow.ellipsis),
+                      ),
                     ),
-                ],
+  
+                    // Selection Badge
+                    if (isSelected)
+                      Positioned(
+                        top: 8, right: 8,
+                        child: Container(
+                          width: 26, height: 26,
+                          decoration: const BoxDecoration(shape: BoxShape.circle, gradient: AppTheme.amberGradient),
+                          child: Center(
+                            child: Text('$selectionIndex', style: const TextStyle(color: AppTheme.primaryBlack, fontSize: 13, fontWeight: FontWeight.w800)),
+                          ),
+                        ).animate().scale(duration: 250.ms, curve: Curves.easeOutBack),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -226,7 +237,7 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
       padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
       decoration: BoxDecoration(
         color: AppTheme.primaryBlack,
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.2), offset: const Offset(0, -5), blurRadius: 20)],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.2), offset: const Offset(0, -5), blurRadius: 20)],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -247,7 +258,7 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: Container(
-              height: 4, width: double.infinity, color: Colors.white.withOpacity(0.05),
+              height: 4, width: double.infinity, color: Colors.white.withValues(alpha: 0.05),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: AnimatedContainer(
@@ -268,9 +279,9 @@ class _TripJournalScreenState extends State<TripJournalScreen> {
               padding: const EdgeInsets.symmetric(vertical: 18),
               decoration: BoxDecoration(
                 gradient: canWrite ? AppTheme.amberGradient : null,
-                color: canWrite ? null : Colors.white.withOpacity(0.05),
+                color: canWrite ? null : Colors.white.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: canWrite ? [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.3), blurRadius: 20, offset: const Offset(0, 5))] : null,
+                boxShadow: canWrite ? [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 5))] : null,
               ),
               child: Center(
                 child: Row(

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -121,16 +122,16 @@ class _ItineraryResultScreenState extends State<ItineraryResultScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
         decoration: BoxDecoration(
-          color: AppTheme.surfaceDark.withOpacity(0.7),
+          color: AppTheme.surfaceDark.withValues(alpha: 0.7),
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: Colors.white.withOpacity(0.06)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
         ),
         child: Row(
           children: [
             _chip(LucideIcons.mapPin, widget.destination),
-            Container(width: 1, height: 20, color: Colors.white.withOpacity(0.06)),
+            Container(width: 1, height: 20, color: Colors.white.withValues(alpha: 0.06)),
             _chip(LucideIcons.calendar, '${widget.days} days'),
-            Container(width: 1, height: 20, color: Colors.white.withOpacity(0.06)),
+            Container(width: 1, height: 20, color: Colors.white.withValues(alpha: 0.06)),
             _chip(LucideIcons.crown, widget.tier),
           ],
         ),
@@ -162,7 +163,7 @@ class _ItineraryResultScreenState extends State<ItineraryResultScreen> {
 
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(10, 16, 20, 16),
-      physics: const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       itemCount: widget.itinerary.length,
       itemBuilder: (ctx, i) {
         final day = widget.itinerary[i];
@@ -183,7 +184,7 @@ class _ItineraryResultScreenState extends State<ItineraryResultScreen> {
                       decoration: BoxDecoration(
                         gradient: AppTheme.amberGradient,
                         shape: BoxShape.circle,
-                        boxShadow: [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.3), blurRadius: 10)],
+                        boxShadow: [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.3), blurRadius: 10)],
                       ),
                       child: Center(
                         child: Text('${day['day'] ?? (i + 1)}',
@@ -199,7 +200,7 @@ class _ItineraryResultScreenState extends State<ItineraryResultScreen> {
                             gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
-                              colors: [AppTheme.accentAmber.withOpacity(0.5), AppTheme.accentAmber.withOpacity(0.05)],
+                              colors: [AppTheme.accentAmber.withValues(alpha: 0.5), AppTheme.accentAmber.withValues(alpha: 0.05)],
                             ),
                           ),
                         ),
@@ -221,7 +222,7 @@ class _ItineraryResultScreenState extends State<ItineraryResultScreen> {
                       if (day['desc'] != null) ...[
                         const SizedBox(height: 6),
                         Text(day['desc'].toString(),
-                            style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.7), fontSize: 13, height: 1.5)),
+                            style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.7), fontSize: 13, height: 1.5)),
                       ],
                       if (activities.isNotEmpty) ...[
                         const SizedBox(height: 12),
@@ -235,7 +236,7 @@ class _ItineraryResultScreenState extends State<ItineraryResultScreen> {
                             ),
                             Expanded(
                               child: Text(act.toString(),
-                                  style: TextStyle(color: AppTheme.textPrimary.withOpacity(0.8), fontSize: 13, height: 1.5)),
+                                  style: TextStyle(color: AppTheme.textPrimary.withValues(alpha: 0.8), fontSize: 13, height: 1.5)),
                             ),
                           ]),
                         )),
@@ -263,9 +264,9 @@ class _ItineraryResultScreenState extends State<ItineraryResultScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.15)),
+        border: Border.all(color: color.withValues(alpha: 0.15)),
       ),
       child: Row(children: [
         Icon(icon, size: 13, color: color),
@@ -279,8 +280,8 @@ class _ItineraryResultScreenState extends State<ItineraryResultScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 14, 24, 20),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceDark.withOpacity(0.9),
-        border: Border(top: BorderSide(color: Colors.white.withOpacity(0.05))),
+        color: AppTheme.surfaceDark.withValues(alpha: 0.9),
+        border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
       ),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         if (!_isSaved)
@@ -295,9 +296,9 @@ class _ItineraryResultScreenState extends State<ItineraryResultScreen> {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
-                color: AppTheme.accentTeal.withOpacity(0.08),
+                color: AppTheme.accentTeal.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppTheme.accentTeal.withOpacity(0.25)),
+                border: Border.all(color: AppTheme.accentTeal.withValues(alpha: 0.25)),
               ),
               child: Row(children: [
                 const Icon(LucideIcons.checkCircle2, color: AppTheme.accentTeal, size: 18),
@@ -311,7 +312,7 @@ class _ItineraryResultScreenState extends State<ItineraryResultScreen> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
-                      color: AppTheme.accentTeal.withOpacity(0.15),
+                      color: AppTheme.accentTeal.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Text("View →",
@@ -333,9 +334,9 @@ class _ItineraryResultScreenState extends State<ItineraryResultScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
-                  color: AppTheme.accentViolet.withOpacity(0.1),
+                  color: AppTheme.accentViolet.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppTheme.accentViolet.withOpacity(0.3)),
+                  border: Border.all(color: AppTheme.accentViolet.withValues(alpha: 0.3)),
                 ),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -362,9 +363,9 @@ class _ItineraryResultScreenState extends State<ItineraryResultScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
-                  color: AppTheme.accentAmber.withOpacity(0.1),
+                  color: AppTheme.accentAmber.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppTheme.accentAmber.withOpacity(0.3)),
+                  border: Border.all(color: AppTheme.accentAmber.withValues(alpha: 0.3)),
                 ),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,

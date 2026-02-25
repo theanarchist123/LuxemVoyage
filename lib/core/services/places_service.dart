@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../config/env.dart';
 import 'firestore_service.dart';
 
 class PlaceData {
@@ -44,8 +45,8 @@ class PlaceData {
 }
 
 class PlacesService {
-  // Uses the same API key as defined in AndroidManifest.xml
-  static const String _apiKey = 'AIzaSyAYF9ZttKXHieF5cgWRbuqlQSSe1G94A0w';
+  // Uses the same API key as defined in AndroidManifest.xml (now Env.aiMapApiKey)
+  static const String _apiKey = Env.aiMapApiKey;
   final FirestoreService _firestoreService = FirestoreService();
 
   Future<List<PlaceData>> searchPlaces(String query) async {
@@ -63,7 +64,11 @@ class PlacesService {
 
       // Caching logic: save the first 5 results to Firestore to save costs later
       for (var place in places.take(5)) {
-        await _firestoreService.cachePlace(place);
+        try {
+          await _firestoreService.cachePlace(place);
+        } catch (e) {
+          print('Error caching place: $e');
+        }
       }
 
       return places;

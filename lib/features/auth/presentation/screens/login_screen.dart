@@ -7,7 +7,7 @@ import '../../../../../main_scaffold.dart';
 import '../../../../core/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: RadialGradient(colors: [
-                    AppTheme.accentViolet.withOpacity(0.12),
+                    AppTheme.accentViolet.withValues(alpha: 0.12),
                     Colors.transparent,
                   ]),
                 ),
@@ -114,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: RadialGradient(colors: [
-                    AppTheme.accentTeal.withOpacity(0.08),
+                    AppTheme.accentTeal.withValues(alpha: 0.08),
                     Colors.transparent,
                   ]),
                 ),
@@ -135,10 +135,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: LinearGradient(colors: [
-                              AppTheme.accentAmber.withOpacity(0.2),
-                              AppTheme.accentAmber.withOpacity(0.05),
+                              AppTheme.accentAmber.withValues(alpha: 0.2),
+                              AppTheme.accentAmber.withValues(alpha: 0.05),
                             ]),
-                            border: Border.all(color: AppTheme.accentAmber.withOpacity(0.5)),
+                            border: Border.all(color: AppTheme.accentAmber.withValues(alpha: 0.5)),
                           ),
                           child: Center(
                             child: Image.asset(
@@ -190,12 +190,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       // Divider
                       Row(
                         children: [
-                          Expanded(child: Divider(color: Colors.white.withOpacity(0.08))),
+                          Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.08))),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Text("or", style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.6), fontSize: 13)),
+                            child: Text("or", style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.6), fontSize: 13)),
                           ),
-                          Expanded(child: Divider(color: Colors.white.withOpacity(0.08))),
+                          Expanded(child: Divider(color: Colors.white.withValues(alpha: 0.08))),
                         ],
                       ).animate().fadeIn(delay: 350.ms),
                       const SizedBox(height: 20),
@@ -205,11 +205,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           decoration: AppTheme.glassDecoration(borderRadius: 14, opacity: 0.04),
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(LucideIcons.chrome, color: AppTheme.textSecondary, size: 20),
-                              const SizedBox(width: 10),
+                              SizedBox(width: 10),
                               Text("Continue with Google",
                                   style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.w500)),
                             ],
@@ -252,10 +252,10 @@ class _LoginScreenState extends State<LoginScreen> {
       style: const TextStyle(color: AppTheme.textPrimary, fontSize: 15),
       decoration: InputDecoration(
         hintText: label,
-        hintStyle: TextStyle(color: AppTheme.textSecondary.withOpacity(0.5)),
+        hintStyle: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.5)),
         filled: true,
-        fillColor: AppTheme.surfaceLight.withOpacity(0.5),
-        prefixIcon: Icon(icon, color: AppTheme.accentAmber.withOpacity(0.7), size: 19),
+        fillColor: AppTheme.surfaceLight.withValues(alpha: 0.5),
+        prefixIcon: Icon(icon, color: AppTheme.accentAmber.withValues(alpha: 0.7), size: 19),
         contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
@@ -267,7 +267,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.04)),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.04)),
         ),
       ),
     );

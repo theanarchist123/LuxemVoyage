@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/gemini_service.dart';
+import '../../../../core/widgets/luxem_context_menu.dart';
 
 class ChatMessage {
   final String text;
@@ -62,7 +63,7 @@ class _ChatScreenState extends State<ChatScreen> {
     } catch (e) {
       if (mounted) {
         setState(() {
-          _messages.add(ChatMessage(text: "I apologize, I'm experiencing connectivity issues. Please try again.", isUser: false));
+          _messages.add(ChatMessage(text: "API Error: ${e.toString()}", isUser: false));
           _isLoading = false;
         });
         _scrollToBottom();
@@ -112,7 +113,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(8, 8, 20, 12),
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.04))),
+        border: Border(bottom: BorderSide(color: Colors.white.withValues(alpha: 0.04))),
       ),
       child: Row(
         children: [
@@ -137,7 +138,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Row(children: [
                   Container(width: 6, height: 6, decoration: const BoxDecoration(color: AppTheme.accentTeal, shape: BoxShape.circle)),
                   const SizedBox(width: 5),
-                  Text("Online · Gemini", style: TextStyle(color: AppTheme.accentTeal.withOpacity(0.8), fontSize: 12, fontWeight: FontWeight.w500)),
+                  Text("Online · Gemini", style: TextStyle(color: AppTheme.accentTeal.withValues(alpha: 0.8), fontSize: 12, fontWeight: FontWeight.w500)),
                 ]),
               ],
             ),
@@ -148,48 +149,57 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildBubble(ChatMessage message) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        mainAxisAlignment: message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (!message.isUser) ...[
-            Container(
-              margin: const EdgeInsets.only(right: 8),
-              width: 30, height: 30,
-              decoration: const BoxDecoration(
-                gradient: AppTheme.amberGradient,
-                shape: BoxShape.circle,
+    return LuxemContextMenu(
+      title: message.isUser ? "Your Message" : "AI Concierge",
+      actions: [
+        ContextMenuAction(title: "Copy Text", icon: LucideIcons.copy, onTap: () {}),
+        ContextMenuAction(title: "Pin Message", icon: LucideIcons.pin, onTap: () {}),
+        if (!message.isUser) ContextMenuAction(title: "Regenerate", icon: LucideIcons.refreshCcw, onTap: () {}),
+        ContextMenuAction(title: "Delete", icon: LucideIcons.trash2, onTap: () {}, color: Colors.redAccent),
+      ],
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 6),
+        child: Row(
+          mainAxisAlignment: message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            if (!message.isUser) ...[
+              Container(
+                margin: const EdgeInsets.only(right: 8),
+                width: 30, height: 30,
+                decoration: const BoxDecoration(
+                  gradient: AppTheme.amberGradient,
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(child: Icon(LucideIcons.sparkles, color: AppTheme.primaryBlack, size: 12)),
               ),
-              child: const Center(child: Icon(LucideIcons.sparkles, color: AppTheme.primaryBlack, size: 12)),
+            ],
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
+                decoration: BoxDecoration(
+                  gradient: message.isUser ? AppTheme.amberGradient : null,
+                  color: message.isUser ? null : AppTheme.surfaceDark,
+                  borderRadius: BorderRadius.only(
+                    topLeft: const Radius.circular(20),
+                    topRight: const Radius.circular(20),
+                    bottomLeft: Radius.circular(message.isUser ? 20 : 4),
+                    bottomRight: Radius.circular(message.isUser ? 4 : 20),
+                  ),
+                  border: message.isUser ? null : Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                ),
+                child: Text(
+                  message.text,
+                  style: TextStyle(
+                    color: message.isUser ? AppTheme.primaryBlack : AppTheme.textPrimary,
+                    fontSize: 14, height: 1.5, fontWeight: message.isUser ? FontWeight.w500 : FontWeight.w400,
+                  ),
+                ),
+              ),
             ),
+            if (message.isUser) const SizedBox(width: 16),
           ],
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
-              decoration: BoxDecoration(
-                gradient: message.isUser ? AppTheme.amberGradient : null,
-                color: message.isUser ? null : AppTheme.surfaceDark,
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(20),
-                  topRight: const Radius.circular(20),
-                  bottomLeft: Radius.circular(message.isUser ? 20 : 4),
-                  bottomRight: Radius.circular(message.isUser ? 4 : 20),
-                ),
-                border: message.isUser ? null : Border.all(color: Colors.white.withOpacity(0.05)),
-              ),
-              child: Text(
-                message.text,
-                style: TextStyle(
-                  color: message.isUser ? AppTheme.primaryBlack : AppTheme.textPrimary,
-                  fontSize: 14, height: 1.5, fontWeight: message.isUser ? FontWeight.w500 : FontWeight.w400,
-                ),
-              ),
-            ),
-          ),
-          if (message.isUser) const SizedBox(width: 16),
-        ],
+        ),
       ),
     );
   }
@@ -203,14 +213,14 @@ class _ChatScreenState extends State<ChatScreen> {
             margin: const EdgeInsets.only(right: 4),
             width: 8, height: 8,
             decoration: BoxDecoration(
-              color: AppTheme.accentAmber.withOpacity(0.5),
+              color: AppTheme.accentAmber.withValues(alpha: 0.5),
               shape: BoxShape.circle,
             ),
           ).animate(onPlay: (c) => c.repeat(reverse: true))
               .fadeIn(delay: Duration(milliseconds: 200 * i))
               .scale(begin: const Offset(0.7, 0.7), end: const Offset(1.0, 1.0), duration: 600.ms, delay: Duration(milliseconds: 200 * i))),
           const SizedBox(width: 8),
-          Text("Thinking...", style: TextStyle(color: AppTheme.textSecondary.withOpacity(0.5), fontSize: 12)),
+          Text("Thinking...", style: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.5), fontSize: 12)),
         ],
       ),
     );
@@ -220,8 +230,8 @@ class _ChatScreenState extends State<ChatScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceDark.withOpacity(0.8),
-        border: Border(top: BorderSide(color: Colors.white.withOpacity(0.04))),
+        color: AppTheme.surfaceDark.withValues(alpha: 0.8),
+        border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.04))),
       ),
       child: Row(
         children: [
@@ -229,9 +239,9 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 18),
               decoration: BoxDecoration(
-                color: AppTheme.surfaceLight.withOpacity(0.5),
+                color: AppTheme.surfaceLight.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(22),
-                border: Border.all(color: Colors.white.withOpacity(0.05)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
               ),
               child: TextField(
                 controller: _textController,
@@ -240,7 +250,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 onSubmitted: _handleSubmitted,
                 decoration: InputDecoration(
                   hintText: "Ask about any destination...",
-                  hintStyle: TextStyle(color: AppTheme.textSecondary.withOpacity(0.35)),
+                  hintStyle: TextStyle(color: AppTheme.textSecondary.withValues(alpha: 0.35)),
                   border: InputBorder.none,
                 ),
               ),
@@ -254,7 +264,7 @@ class _ChatScreenState extends State<ChatScreen> {
               decoration: BoxDecoration(
                 gradient: AppTheme.amberGradient,
                 shape: BoxShape.circle,
-                boxShadow: [BoxShadow(color: AppTheme.accentAmber.withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 4))],
+                boxShadow: [BoxShadow(color: AppTheme.accentAmber.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
               ),
               child: const Icon(LucideIcons.send, color: AppTheme.primaryBlack, size: 18),
             ),
