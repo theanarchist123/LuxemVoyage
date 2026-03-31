@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/vibe_theme_extension.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
 import '../../../../../main_scaffold.dart';
 
@@ -48,11 +48,20 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    final vibe = Theme.of(context).extension<VibeThemeExtension>() ?? VibeThemeExtension.empty;
+    final bgColors = vibe.isVibeActive 
+        ? [vibe.customGradientColors.last, vibe.customGradientColors.first] 
+        : const [Color(0xFF0F172A), Color(0xFF080E1A)];
+
+    final primaryGlow = Theme.of(context).primaryColor;
+
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
+      body: AnimatedContainer(
+        duration: const Duration(milliseconds: 1200),
+        curve: Curves.easeInOutCubic,
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF0F172A), Color(0xFF080E1A)],
+            colors: bgColors,
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -66,14 +75,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               builder: (context, child) {
                 return Opacity(
                   opacity: 0.3 + (_glowController.value * 0.4), // Pulses between 0.3 and 0.7
-                  child: Container(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 1200),
                     width: 350,
                     height: 350,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: RadialGradient(
                         colors: [
-                          AppTheme.accentAmber.withValues(alpha: 0.4),
+                          primaryGlow.withValues(alpha: 0.4),
                           Colors.transparent,
                         ],
                         stops: const [0.1, 1.0],
@@ -104,7 +114,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.accentAmber.withValues(alpha: 0.1),
+                          color: primaryGlow.withValues(alpha: 0.1),
                           blurRadius: 40,
                           spreadRadius: 10,
                         ),
@@ -145,12 +155,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                   ),
                   child: Text(
-                    "CURATED TRAVEL EXPERIENCES",
+                    vibe.isVibeActive ? vibe.eventName.toUpperCase() : "CURATED TRAVEL EXPERIENCES",
                     style: GoogleFonts.inter(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 4.0,
-                      color: AppTheme.accentAmber,
+                      color: primaryGlow,
                     ),
                   ),
                 ).animate()
@@ -166,7 +176,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 width: 120,
                 child: LinearProgressIndicator(
                   backgroundColor: Colors.white.withValues(alpha: 0.1),
-                  color: AppTheme.accentAmber.withValues(alpha: 0.5),
+                  color: primaryGlow.withValues(alpha: 0.5),
                   minHeight: 2,
                 ),
               ).animate().fadeIn(delay: 2000.ms, duration: 1000.ms),

@@ -61,7 +61,7 @@ You are an expert museum and travel audio guide narrator with an elegant, captiv
 Write a private audio guide script for: "$placeName".
 
 Requirements:
-- Length: approximately 250–350 words (2–3 minutes spoken)
+- Length: approximately 350-450 words (3-4 minutes spoken)
 - Start with a vivid, atmospheric opening sentence that sets the scene
 - Include: history, architectural highlights, cultural significance, hidden details most visitors miss
 - Use natural spoken language — no bullet points, no headers, just flowing paragraphs
@@ -146,15 +146,49 @@ Write only the narration — no titles, no preamble.
     }
   }
 
+  /// FEATURE: "Travel Persona" Generator
+  /// Gives the user a fun, shareable travel identity before their trip is fully revealed.
+  Future<Map<String, String>> generateTravelPersona(List<String> traits) async {
+    final prompt = '''
+    A traveller has selected these aesthetics, moods, or activities: ${traits.join(', ')}.
+    Generate a highly evocative, premium, and fun "Travel Persona" for them.
+    
+    Return JSON with EXACTLY these keys:
+    {
+      "persona_name": "e.g., The Midnight Artisan, The Zenith Explorer, The Coastal Intellectual",
+      "tagline": "One punchy sentence describing their travel style."
+    }
+    ''';
+    
+    try {
+      final response = await _plannerModel.generateContent([Content.text(prompt)]);
+      final text = response.text ?? '{}';
+      final clean = text.replaceAll('```json', '').replaceAll('```', '').trim();
+      final decoded = Map<String, dynamic>.from(jsonDecode(clean));
+      return {
+        'persona_name': decoded['persona_name'] as String? ?? 'The Global Wanderer',
+        'tagline': decoded['tagline'] as String? ?? 'Chasing horizons and curating memories.',
+      };
+    } catch (_) {
+      return {
+        'persona_name': 'The Global Wanderer',
+        'tagline': 'Chasing horizons and curating memories.',
+      };
+    }
+  }
+
   /// FEATURE: "Tinder for Travel" Swipe Match
   /// Takes a list of explicit user preferences and builds a perfect city escape.
   Future<String> generateItineraryFromMatches(List<String> matches) async {
+    // Dynamic duration based on matches, clamped between 3 and 7 days
+    final int days = (matches.length).clamp(3, 7);
+    
     final prompt = '''
     You are a luxury travel concierge. 
     The user has explicitly liked these travel aesthetics/activities: ${matches.join(", ")}. 
 
     1. Pick the absolute best global destination that perfectly incorporates all or most of these exact aesthetics.
-    2. Build a high-end, exciting 3-day itinerary in that destination.
+    2. Build a high-end, exciting $days-day itinerary in that destination.
 
     Return the response STRICTLY as a valid JSON object matching this exact structure, with no markdown formatting or extra text:
     {
@@ -165,17 +199,8 @@ Write only the narration — no titles, no preamble.
           "day": 1,
           "title": "Welcome to Paradise",
           "desc": "Check into your hotel and immediately go to..."
-        },
-        {
-          "day": 2,
-          "title": "Adventure awaits",
-          "desc": "Morning hike followed by..."
-        },
-        {
-          "day": 3,
-          "title": "Farewell",
-          "desc": "Final morning coffee at..."
         }
+        // ... generate exactly $days days following this structure
       ]
     }
     ''';

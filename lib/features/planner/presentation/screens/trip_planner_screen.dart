@@ -7,6 +7,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/gold_button.dart';
 import '../../../../core/services/gemini_service.dart';
 import 'itinerary_result_screen.dart';
+import 'hype_trailer_screen.dart';
 
 class TripPlannerScreen extends StatefulWidget {
   final String? preselectedDestination;
@@ -32,10 +33,32 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
     {'name': 'Maldives', 'image': 'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?q=80&w=400&auto=format&fit=crop', 'emoji': '🏝️'},
     {'name': 'Santorini, Greece', 'image': 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=400&auto=format&fit=crop', 'emoji': '🏛️'},
     {'name': 'Kyoto, Japan', 'image': 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=400&auto=format&fit=crop', 'emoji': '⛩️'},
-    {'name': 'Amalfi Coast', 'image': 'https://images.unsplash.com/photo-1612698093158-e07ac200d44e?q=80&w=400&auto=format&fit=crop', 'emoji': '🌊'},
+    {'name': 'Amalfi Coast, Italy', 'image': 'https://images.unsplash.com/photo-1612698093158-e07ac200d44e?q=80&w=400&auto=format&fit=crop', 'emoji': '🌊'},
     {'name': 'Bali, Indonesia', 'image': 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=400&auto=format&fit=crop', 'emoji': '🌴'},
     {'name': 'Dubai, UAE', 'image': 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=400&auto=format&fit=crop', 'emoji': '🏙️'},
-    {'name': 'Machu Picchu', 'image': 'https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=400&auto=format&fit=crop', 'emoji': '🏔️'},
+    {'name': 'Machu Picchu, Peru', 'image': 'https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=400&auto=format&fit=crop', 'emoji': '🏔️'},
+    {'name': 'Bora Bora, French Polynesia', 'image': 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=400&auto=format&fit=crop', 'emoji': '🛖'},
+    {'name': 'Serengeti, Tanzania', 'image': 'https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=400&auto=format&fit=crop', 'emoji': '🦁'},
+    {'name': 'New York City, USA', 'image': 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=400&auto=format&fit=crop', 'emoji': '🗽'},
+    {'name': 'Rome, Italy', 'image': 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?q=80&w=400&auto=format&fit=crop', 'emoji': '🍕'},
+    {'name': 'Cape Town, South Africa', 'image': 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?q=80&w=400&auto=format&fit=crop', 'emoji': '🐧'},
+    {'name': 'Swiss Alps, Switzerland', 'image': 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=400&auto=format&fit=crop', 'emoji': '🎿'},
+    {'name': 'Reykjavik, Iceland', 'image': 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?q=80&w=400&auto=format&fit=crop', 'emoji': '🌋'},
+    {'name': 'Sydney, Australia', 'image': 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?q=80&w=400&auto=format&fit=crop', 'emoji': '🦘'},
+    {'name': 'Queenstown, New Zealand', 'image': 'https://images.unsplash.com/photo-1589802829985-817e51171b92?q=80&w=400&auto=format&fit=crop', 'emoji': '⛰️'},
+    {'name': 'Marrakech, Morocco', 'image': 'https://images.unsplash.com/photo-1539020140153-e479b8b47c53?q=80&w=400&auto=format&fit=crop', 'emoji': '🐪'},
+    {'name': 'Rio de Janeiro, Brazil', 'image': 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?q=80&w=400&auto=format&fit=crop', 'emoji': '💃'},
+    {'name': 'London, UK', 'image': 'https://images.unsplash.com/photo-1513635269975-5969336ac521?q=80&w=400&auto=format&fit=crop', 'emoji': '💂'},
+    {'name': 'Banff, Canada', 'image': 'https://images.unsplash.com/photo-1512273222628-4daea6e55abb?q=80&w=400&auto=format&fit=crop', 'emoji': '🌲'},
+    {'name': 'Phuket, Thailand', 'image': 'https://images.unsplash.com/photo-1589394815804-964ce0fa5715?q=80&w=400&auto=format&fit=crop', 'emoji': '🐘'},
+    {'name': 'Petra, Jordan', 'image': 'https://images.unsplash.com/photo-1579607629555-520336aabd1e?q=80&w=400&auto=format&fit=crop', 'emoji': '🏺'},
+    {'name': 'Istanbul, Turkey', 'image': 'https://images.unsplash.com/photo-1524231757912-21f4fe3a08d2?q=80&w=400&auto=format&fit=crop', 'emoji': '🕌'},
+    {'name': 'Cusco, Peru', 'image': 'https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=400&auto=format&fit=crop', 'emoji': '🦙'},
+    {'name': 'Prague, Czech Republic', 'image': 'https://images.unsplash.com/photo-1519677100203-a0e668c92439?q=80&w=400&auto=format&fit=crop', 'emoji': '🏰'},
+    {'name': 'Venice, Italy', 'image': 'https://images.unsplash.com/photo-1514890547357-a9ee288728e0?q=80&w=400&auto=format&fit=crop', 'emoji': '🛶'},
+    {'name': 'Havana, Cuba', 'image': 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400&auto=format&fit=crop', 'emoji': '🚘'},
+    {'name': 'Florence, Italy', 'image': 'https://images.unsplash.com/photo-1543429188-4e8c56fa2b0a?q=80&w=400&auto=format&fit=crop', 'emoji': '🎨'},
+    {'name': 'Galapagos Islands', 'image': 'https://images.unsplash.com/photo-1563242060-e448bacc2cd9?q=80&w=400&auto=format&fit=crop', 'emoji': '🐢'}
   ];
 
   @override
@@ -73,17 +96,16 @@ class _TripPlannerScreenState extends State<TripPlannerScreen> {
       if (!mounted) return;
       setState(() => _isGenerating = false);
 
-      Navigator.push(context, PageRouteBuilder(
+      Navigator.pushReplacement(context, PageRouteBuilder(
         transitionDuration: const Duration(milliseconds: 500),
-        pageBuilder: (_, __, ___) => ItineraryResultScreen(
-          destination: _selectedDestination, days: _days,
-          tier: _tiers[_selectedTier]['name']!, itinerary: decoded,
+        pageBuilder: (_, __, ___) => HypeTrailerScreen(
+          destination: _selectedDestination, 
+          days: _days,
+          tier: _tiers[_selectedTier]['name']!, 
+          itinerary: decoded,
+          traits: const [],
         ),
-        transitionsBuilder: (_, animation, __, child) => SlideTransition(
-          position: Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero)
-              .animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
-          child: child,
-        ),
+        transitionsBuilder: (_, animation, __, child) => FadeTransition(opacity: animation, child: child),
       ));
     } catch (e) {
       if (!mounted) return;

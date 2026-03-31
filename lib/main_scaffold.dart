@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:circle_nav_bar/circle_nav_bar.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'core/theme/app_theme.dart';
 import 'features/home/presentation/screens/home_dashboard.dart';
 import 'features/map/presentation/screens/map_screen.dart';

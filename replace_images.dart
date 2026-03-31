@@ -38,7 +38,7 @@ void main() {
 
       if (changed) {
         if (!content.contains("import 'package:cached_network_image/cached_network_image.dart';")) {
-           content = "import 'package:cached_network_image/cached_network_image.dart';\n" + content;
+           content = "import 'package:cached_network_image/cached_network_image.dart';\n$content";
         }
         entity.writeAsStringSync(content);
         print('Updated: ${entity.path}');

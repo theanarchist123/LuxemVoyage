@@ -7,7 +7,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/unsplash_service.dart';
 import '../../../../core/services/gemini_service.dart';
-import 'itinerary_result_screen.dart';
+import 'hype_trailer_screen.dart';
 
 class TravelSwipeMatchScreen extends StatefulWidget {
   const TravelSwipeMatchScreen({super.key});
@@ -124,11 +124,12 @@ class _TravelSwipeMatchScreenState extends State<TravelSwipeMatchScreen> {
 
       Navigator.pushReplacement(context, PageRouteBuilder(
         transitionDuration: const Duration(milliseconds: 800),
-        pageBuilder: (_, __, ___) => ItineraryResultScreen(
+        pageBuilder: (_, __, ___) => HypeTrailerScreen(
           destination: dest,
           days: itinerary.length,
           tier: 'Curated VIP',
           itinerary: itinerary,
+          traits: _matchedVibes,
         ),
         transitionsBuilder: (_, animation, __, child) => FadeTransition(opacity: animation, child: child),
       ));

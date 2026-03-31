@@ -22,6 +22,9 @@ import '../../../../features/planner/presentation/screens/swipe_match_screen.dar
 import '../../../../features/planner/presentation/screens/trip_journal_screen.dart';
 import '../../../../features/gamification/presentation/screens/digital_passport_screen.dart';
 
+import '../../../../features/vibe_engine/presentation/widgets/vibe_background_particles.dart';
+import '../../../../features/vibe_engine/presentation/widgets/vibe_crystal.dart';
+
 // ─── Fallback curated experiences ────────────────────────────────────────────
 const List<Map<String, String>> _fallbackExperiences = [
   {'name': 'Santorini Suites', 'location': 'Santorini, Greece', 'rating': '4.9', 'price': '\$\$\$', 'image': 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=600&auto=format&fit=crop'},
@@ -146,54 +149,66 @@ class _HomeDashboardState extends State<HomeDashboard> {
         break;
       default:
         // Flights, Hotels, Experiences → open Map with pre-filled search
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const MapScreen()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => MapScreen(initialQuery: query)));
         break;
     }
   }
 
   void _onSearch(String query) {
     if (query.trim().isEmpty) return;
-    Navigator.push(context, MaterialPageRoute(builder: (_) => const MapScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (_) => MapScreen(initialQuery: query.trim())));
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(gradient: AppTheme.screenGradient),
-      child: SafeArea(
-        bottom: false,
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          slivers: [
-            SliverToBoxAdapter(child: _buildHeroSection()),
-            const SliverToBoxAdapter(child: SizedBox(height: 32)),
-            SliverToBoxAdapter(child: _buildSectionHeader('The AI Suite', LucideIcons.sparkles)),
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
-            SliverToBoxAdapter(child: _buildFeaturedInnovationsCarousel()),
-            const SliverToBoxAdapter(child: SizedBox(height: 36)),
-            SliverToBoxAdapter(child: _buildSectionHeader('Travel Toolkit', LucideIcons.briefcase)),
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
-            SliverToBoxAdapter(child: _buildToolkitGrid()),
-            const SliverToBoxAdapter(child: SizedBox(height: 36)),
-            SliverToBoxAdapter(child: _buildQuickActions()),
-            const SliverToBoxAdapter(child: SizedBox(height: 36)),
-            SliverToBoxAdapter(child: _buildSectionHeader('Curated Experiences', LucideIcons.compass, onSeeAll: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const TravellerFeedScreen()));
-            })),
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
-            SliverToBoxAdapter(child: _buildExperiencesList()),
-            const SliverToBoxAdapter(child: SizedBox(height: 36)),
-            SliverToBoxAdapter(child: _buildSectionHeader('Trending Destinations', LucideIcons.trendingUp, onSeeAll: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const MapScreen()));
-            })),
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
-            SliverToBoxAdapter(child: _buildTrendingSection()),
-            const SliverToBoxAdapter(child: SizedBox(height: 120)),
+      child: VibeBackgroundParticles(
+        child: SafeArea(
+          bottom: false,
+          child: Stack(
+            children: [
+              CustomScrollView(
+                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                slivers: [
+                  SliverToBoxAdapter(child: _buildHeroSection()),
+                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                  SliverToBoxAdapter(child: _buildSectionHeader('The AI Suite', LucideIcons.sparkles)),
+                const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                SliverToBoxAdapter(child: _buildFeaturedInnovationsCarousel()),
+                const SliverToBoxAdapter(child: SizedBox(height: 36)),
+                SliverToBoxAdapter(child: _buildSectionHeader('Travel Toolkit', LucideIcons.briefcase)),
+                const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                SliverToBoxAdapter(child: _buildToolkitGrid()),
+                const SliverToBoxAdapter(child: SizedBox(height: 36)),
+                SliverToBoxAdapter(child: _buildQuickActions()),
+                const SliverToBoxAdapter(child: SizedBox(height: 36)),
+                SliverToBoxAdapter(child: _buildSectionHeader('Curated Experiences', LucideIcons.compass, onSeeAll: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const TravellerFeedScreen()));
+                })),
+                const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                SliverToBoxAdapter(child: _buildExperiencesList()),
+                const SliverToBoxAdapter(child: SizedBox(height: 36)),
+                SliverToBoxAdapter(child: _buildSectionHeader('Trending Destinations', LucideIcons.trendingUp, onSeeAll: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const MapScreen(initialQuery: 'top tourist destinations')));
+                })),
+                const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                SliverToBoxAdapter(child: _buildTrendingSection()),
+                const SliverToBoxAdapter(child: SizedBox(height: 120)),
+              ],
+            ),
+            const Positioned(
+              bottom: 100,
+              right: 16,
+              child: VibeCrystal(),
+            ),
           ],
         ),
       ),
+      ),
     );
   }
+
 
   // ─── Hero Section ────────────────────────────────────────────────────────────
   Widget _buildHeroSection() {
@@ -787,7 +802,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
               Expanded(
                 flex: 5,
                 child: GestureDetector(
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MapScreen())),
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MapScreen(initialQuery: 'things to do near me'))),
                   child: FutureBuilder<WeatherData?>(
                     future: _weatherFuture,
                     builder: (ctx, snap) {

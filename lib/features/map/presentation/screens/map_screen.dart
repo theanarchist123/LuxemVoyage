@@ -10,7 +10,8 @@ import '../../../../core/services/places_service.dart';
 import '../../../experiences/presentation/screens/create_experience_screen.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+  final String? initialQuery;
+  const MapScreen({super.key, this.initialQuery});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -46,6 +47,17 @@ class _MapScreenState extends State<MapScreen> {
     {"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#334155"}]}
   ]
   ''';
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialQuery != null && widget.initialQuery!.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _searchController.text = widget.initialQuery!;
+        _searchPlaces(widget.initialQuery!);
+      });
+    }
+  }
 
   void _onMapTap(LatLng position) async {
     final markerId = MarkerId('tapped_${DateTime.now().millisecondsSinceEpoch}');

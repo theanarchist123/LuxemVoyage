@@ -27,6 +27,7 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
   String? _scriptError;
   bool _isPlaying = false;
   bool _isPaused = false;
+  bool _isLooping = true;
   double _progress = 0.0;
   int _currentWordIndex = 0;
   int _pausedWordIndex = 0;
@@ -90,6 +91,10 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
         });
         _waveController.stop();
         _waveController.reset();
+
+        if (_isLooping) {
+          _play();
+        }
       }
     });
 
@@ -534,6 +539,22 @@ class _AudioGuidePlayerState extends State<AudioGuidePlayer>
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(LucideIcons.square, color: AppTheme.textPrimary, size: 18),
+                ),
+              ),
+
+              // Loop toggle
+              GestureDetector(
+                onTap: () {
+                  setState(() => _isLooping = !_isLooping);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: _isLooping ? AppTheme.accentAmber.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(8),
+                    border: _isLooping ? Border.all(color: AppTheme.accentAmber.withValues(alpha: 0.3)) : null,
+                  ),
+                  child: Icon(LucideIcons.repeat, color: _isLooping ? AppTheme.accentAmber : AppTheme.textSecondary, size: 18),
                 ),
               ),
 

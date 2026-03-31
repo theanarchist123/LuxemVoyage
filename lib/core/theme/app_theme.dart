@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'vibe_theme_extension.dart';
+
 class AppTheme {
   // ── Core Palette: "Midnight Aurora" ──
   static const Color primaryBlack = Color(0xFF080E1A);
@@ -74,18 +76,28 @@ class AppTheme {
   }
 
   // ── Theme Data ──
-  static ThemeData get darkTheme {
+  static ThemeData getTheme({VibeThemeExtension? vibeExtension}) {
+    // Determine dynamic primary color based on vibe
+    final vibePrimary = vibeExtension?.isVibeActive == true 
+        ? (vibeExtension?.customGradientColors.isNotEmpty == true 
+            ? vibeExtension!.customGradientColors.first 
+            : accentAmber)
+        : accentAmber;
+
     return ThemeData(
       brightness: Brightness.dark,
       scaffoldBackgroundColor: primaryBlack,
-      primaryColor: accentAmber,
-      colorScheme: const ColorScheme.dark(
-        primary: accentAmber,
+      primaryColor: vibePrimary,
+      colorScheme: ColorScheme.dark(
+        primary: vibePrimary,
         secondary: accentTeal,
         tertiary: accentViolet,
         surface: surfaceDark,
         onSurface: textPrimary,
       ),
+      extensions: [
+        vibeExtension ?? VibeThemeExtension.empty,
+      ],
       textTheme: TextTheme(
         displayLarge: GoogleFonts.inter(color: textPrimary, fontSize: 34, fontWeight: FontWeight.w800, letterSpacing: -0.5),
         displayMedium: GoogleFonts.inter(color: textPrimary, fontSize: 26, fontWeight: FontWeight.w700, letterSpacing: -0.3),
@@ -93,12 +105,12 @@ class AppTheme {
         titleMedium: GoogleFonts.inter(color: textPrimary, fontSize: 17, fontWeight: FontWeight.w600),
         bodyLarge: GoogleFonts.inter(color: textPrimary, fontSize: 16, fontWeight: FontWeight.w400, height: 1.5),
         bodyMedium: GoogleFonts.inter(color: textSecondary, fontSize: 14, fontWeight: FontWeight.w400, height: 1.5),
-        labelLarge: GoogleFonts.inter(color: accentAmber, fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 0.5),
+        labelLarge: GoogleFonts.inter(color: vibePrimary, fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 0.5),
         labelSmall: GoogleFonts.inter(color: textSecondary, fontSize: 11, fontWeight: FontWeight.w500, letterSpacing: 0.8),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: accentAmber,
+          backgroundColor: vibePrimary,
           foregroundColor: primaryBlack,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
@@ -124,9 +136,12 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: accentAmber, width: 1.5),
+          borderSide: BorderSide(color: vibePrimary, width: 1.5),
         ),
       ),
     );
   }
+
+  // To not break existing code entirely
+  static ThemeData get darkTheme => getTheme();
 }

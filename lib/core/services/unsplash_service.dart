@@ -32,7 +32,31 @@ class UnsplashService {
     return _getFallbackImage(query);
   }
 
-  String _getFallbackImage(String query) {
+  Future<List<String>> getDestinationImageUrls(String query, {int count = 3}) async {
+    if (_accessKey == 'YOUR_UNSPLASH_ACCESS_KEY_HERE' || _accessKey.isEmpty) {
+      return List.generate(count, (index) => _getFallbackImage(query, offset: index));
+    }
+
+    final url = Uri.parse(
+      'https://api.unsplash.com/search/photos?query=${Uri.encodeComponent(query)}&orientation=landscape&per_page=$count&client_id=$_accessKey'
+    );
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['results'] != null && (data['results'] as List).isNotEmpty) {
+          return (data['results'] as List).map((e) => e['urls']['regular'] as String).toList();
+        }
+      }
+    } catch (e) {
+      print('Error fetching images from Unsplash: $e');
+    }
+    
+    return List.generate(count, (index) => _getFallbackImage(query, offset: index));
+  }
+
+  String _getFallbackImage(String query, {int offset = 0}) {
     // Use a more robust hash than simple summing
     final hash = query.hashCode.abs();
     
@@ -52,7 +76,7 @@ class UnsplashService {
       '1528360983277-13d401cdc186', // Kyoto (Zen/Temple)
     ];
     
-    final selectedId = fallbackIds[hash % fallbackIds.length];
+    final selectedId = fallbackIds[(hash + offset) % fallbackIds.length];
     return 'https://images.unsplash.com/photo-$selectedId?q=80&w=800&auto=format&fit=crop';
   }
 }
